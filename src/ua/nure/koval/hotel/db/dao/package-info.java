@@ -5,4 +5,4 @@
  * @author Koval
  *
  */
-package ua.nure.koval.hotel.DB;
+package ua.nure.koval.hotel.db.dao;
