@@ -1,5 +1,8 @@
 package ua.nure.koval.hotel.entity;
 
+import ua.nure.koval.hotel.entity.enums.RoomClass;
+import ua.nure.koval.hotel.entity.enums.Status;
+
 public class Room extends Entity {
 	private static final long serialVersionUID = -6703945838881235066L;
 	private int capacity;
@@ -37,5 +40,9 @@ public class Room extends Entity {
 	}
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+	
+	public String toString() {
+		return "id: " + getId() + " capacity: " + capacity + " cost: " + cost + " " + rClass.getName() + " " + status.getName();
 	}
 }

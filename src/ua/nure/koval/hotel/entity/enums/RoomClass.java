@@ -1,4 +1,4 @@
-package ua.nure.koval.hotel.entity;
+package ua.nure.koval.hotel.entity.enums;
 
 public enum RoomClass {
 	STANDARD, DELUXE, SUITE;
@@ -7,7 +7,7 @@ public enum RoomClass {
 		return name().toLowerCase();
 	}
 	
-	public RoomClass fromString(String rClass) {
+	public static RoomClass fromString(String rClass) {
 		return RoomClass.valueOf(rClass.toUpperCase());
 	}
 }

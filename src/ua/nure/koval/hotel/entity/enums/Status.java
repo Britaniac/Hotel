@@ -1,4 +1,4 @@
-package ua.nure.koval.hotel.entity;
+package ua.nure.koval.hotel.entity.enums;
 
 public enum Status {
 	FREE, BOOKED, OCCUPIED, UNAVAILABLE;

@@ -2,6 +2,8 @@ package ua.nure.koval.hotel.entity;
 
 import java.time.LocalDate;
 
+import ua.nure.koval.hotel.entity.enums.RoomClass;
+
 public class Request extends Entity {
 	private static final long serialVersionUID = -4983628543644100712L;
 	private int capacity;

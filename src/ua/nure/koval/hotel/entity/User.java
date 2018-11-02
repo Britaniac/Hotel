@@ -1,5 +1,7 @@
 package ua.nure.koval.hotel.entity;
 
+import ua.nure.koval.hotel.entity.enums.Role;
+
 public class User extends Entity {
 	private static final long serialVersionUID = -3856409799378222226L;
 	private String login;

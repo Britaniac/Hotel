@@ -1,4 +1,4 @@
-package ua.nure.koval.hotel.entity;
+package ua.nure.koval.hotel.entity.enums;
 
 public enum Role {
 	MANAGER, CLIENT, UNREGISTERED;
