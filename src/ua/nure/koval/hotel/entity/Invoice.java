@@ -7,6 +7,8 @@ public class Invoice extends Entity {
 	private static final long serialVersionUID = 3782768787902029479L;
 	private double sum;
 	private LocalDate created;
+	private boolean paid = false;
+	
 	public double getSum() {
 		return sum;
 	}
@@ -18,6 +20,12 @@ public class Invoice extends Entity {
 	}
 	public void setCreated(LocalDate created) {
 		this.created = created;
+	}
+	public boolean isPaid() {
+		return paid;
+	}
+	public void setPaid(boolean paid) {
+		this.paid = paid;
 	}
 	
 }

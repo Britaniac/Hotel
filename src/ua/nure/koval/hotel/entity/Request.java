@@ -9,8 +9,14 @@ public class Request extends Entity {
 	private int capacity;
 	private RoomClass rClass;
 	private Long roomId;
+	private LocalDate created;
 	private LocalDate from;
 	private LocalDate to;
+	private Long invoiceId;
+	
+	public Request() {
+		created = LocalDate.now();
+	}
 	
 	public LocalDate getFrom() {
 		return from;
@@ -42,6 +48,20 @@ public class Request extends Entity {
 	}
 	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
+	}
+	public LocalDate getCreated() {
+		return created;
+	}
+	public void setCreated(LocalDate created) {
+		this.created = created;
+	}
+
+	public Long getInvoiceId() {
+		return invoiceId;
+	}
+
+	public void setInvoiceId(Long invoiceId) {
+		this.invoiceId = invoiceId;
 	}
 	
 	

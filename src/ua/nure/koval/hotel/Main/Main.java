@@ -17,12 +17,10 @@ public class Main {
 
 	public static void main(String...strings) throws SQLException {
 		RoomDAO rd = new RoomDAO();
-		List<Room> rooms = new ArrayList<>();
-		rooms = rd.getAll();
+		Room room = rd.getById((long) (64));
+		room.setCost(299);
+		rd.delete(room);
 		
-		for (Room r: rooms) {
-			System.out.println(r);
-		}
 	}
 
 	private static <T> void printList(List<T> list) {

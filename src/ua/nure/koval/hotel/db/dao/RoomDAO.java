@@ -14,20 +14,41 @@ import ua.nure.koval.hotel.entity.enums.RoomClass;
 import ua.nure.koval.hotel.entity.enums.Status;
 
 public class RoomDAO implements DAO<Room> {
+	private static final String SQL_FIND_BY_ID = "SELECT * FROM rooms where ID=?";
 	private static final String SQL_FIND_ALL_ROOMS = "SELECT * FROM rooms";
 	private static final String SQL_INSERT_ROOM = "INSERT INTO rooms (capacity, cost, class, status) VALUES(?,?,?,?)";
+	private static final String SQL_UPDATE_ROOM = "UPDATE rooms SET capacity=?, cost=?, class=?,status=? WHERE ID=?";
+	private static final String SQL_DELETE_ROOM = "DELETE FROM rooms WHERE ID=?";
+	Connection con;
+	
+	public RoomDAO() {
+		try {
+			con = DBManager.getInstance().getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public Room getById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Room room = new Room();
+		try {
+			PreparedStatement pstmt = con.prepareStatement(SQL_FIND_BY_ID);
+			pstmt.setLong(1, id);
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+			RoomMapper mapper = new RoomMapper();
+			room = mapper.mapRow(rs);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return room;
 	}
 
 	@Override
 	public List<Room> getAll() {
 		List<Room> rooms = new ArrayList<>();
 		try {
-			Connection con = DBManager.getInstance().getConnection();
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(SQL_FIND_ALL_ROOMS);
 			RoomMapper mapper = new RoomMapper();
@@ -44,7 +65,6 @@ public class RoomDAO implements DAO<Room> {
 	@Override
 	public boolean save(Room room) {
 		try {
-			Connection con = DBManager.getInstance().getConnection();
 			PreparedStatement pstmt = con.prepareStatement(SQL_INSERT_ROOM, Statement.RETURN_GENERATED_KEYS);
 			int k = 1;
 			pstmt.setInt(k++, room.getCapacity());
@@ -66,13 +86,35 @@ public class RoomDAO implements DAO<Room> {
 
 	@Override
 	public boolean update(Room room) {
-		// TODO Auto-generated method stub
+		try {
+			PreparedStatement pstmt = con.prepareStatement(SQL_UPDATE_ROOM);
+			int k = 1;
+			pstmt.setInt(k++, room.getCapacity());
+			pstmt.setDouble(k++, room.getCost());
+			pstmt.setString(k++, room.getrClass().getName());
+			pstmt.setString(k++, room.getStatus().getName());
+			pstmt.setLong(k++, room.getId());
+			if (pstmt.executeUpdate() > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 
 	@Override
 	public boolean delete(Room room) {
-		// TODO Auto-generated method stub
+		try {
+			PreparedStatement pstmt = con.prepareStatement(SQL_DELETE_ROOM);
+			int k = 1;
+			pstmt.setLong(k++, room.getId());
+			if (pstmt.executeUpdate() > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 	

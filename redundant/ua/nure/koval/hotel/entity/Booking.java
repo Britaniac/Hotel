@@ -11,6 +11,11 @@ public class Booking extends Entity {
 	private LocalDate to;
 	private boolean paid;
 	private Long invoiceId;
+	
+	public Booking() {
+		created = LocalDate.now();
+	}
+	
 	public Long getRoomId() {
 		return roomId;
 	}
@@ -46,5 +51,11 @@ public class Booking extends Entity {
 	}
 	public void setPaid(boolean paid) {
 		this.paid = paid;
+	}
+	public Long getInvoiceId() {
+		return invoiceId;
+	}
+	public void setInvoiceId(Long invoiceId) {
+		this.invoiceId = invoiceId;
 	}
 }

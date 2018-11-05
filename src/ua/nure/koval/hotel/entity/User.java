@@ -11,6 +11,7 @@ public class User extends Entity {
 	private String localeName;
 	private String email;
 	private Role role;
+	private Long requestId;
 	
 	
 	public String getLogin() {
@@ -58,5 +59,11 @@ public class User extends Entity {
 	
 	public String toString() {
 		return firstName + " " + lastName +" " + email + " " + role.toString();
+	}
+	public Long getRequestId() {
+		return requestId;
+	}
+	public void setRequestId(Long requestId) {
+		this.requestId = requestId;
 	}
 }
