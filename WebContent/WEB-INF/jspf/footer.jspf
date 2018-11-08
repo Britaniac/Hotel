@@ -1,0 +1,16 @@
+<%--=========================================================================== 
+Footer (bottom area). 
+===========================================================================--%> 
+<style>
+footer {
+   position:absolute;
+   bottom:0;
+   width:100%;
+   height:10%;
+   background:#6cf;
+   text-align: center;
+}
+</style>
+<footer>
+  <p>Hotel Java project</p>
+</footer>

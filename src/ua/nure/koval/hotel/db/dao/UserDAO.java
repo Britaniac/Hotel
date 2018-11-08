@@ -22,6 +22,7 @@ public class UserDAO implements DAO<User> {
 	private static final String SQL_UPDATE_USER = "UPDATE users SET login=?, password=?, first_name=?, last_name=?, email=?, locale=?, role=?, request_id=?"
 			+ "WHERE ID=?";
 	private static final String SQL_DELETE_USER = "DELETE FROM users WHERE id=?";
+	private static final String SQL_GET_PASSWORD = "SELECT password FROM users WHERE login=?";
 	
 	private static Connection con;
 	
@@ -54,20 +55,23 @@ public class UserDAO implements DAO<User> {
 		PreparedStatement pstmt = con.prepareStatement(SQL_FIND_USER_BY_LOGIN);
 		pstmt.setString(1, login);
 		ResultSet rs = pstmt.executeQuery();
-		rs.next();
-		UserMapper mapper = new UserMapper();
-		User user = mapper.mapRow(rs);
-		return user;
+		if (rs.next()) {
+			UserMapper mapper = new UserMapper();
+			return mapper.mapRow(rs);
+		}
+		return null;
 	}
 	
 	public User findByEmail(String email) throws SQLException {
 		PreparedStatement pstmt = con.prepareStatement(SQL_FIND_USER_BY_EMAIL);
 		pstmt.setString(1, email);
 		ResultSet rs = pstmt.executeQuery();
-		rs.next();
-		UserMapper mapper = new UserMapper();
-		User user = mapper.mapRow(rs);
-		return user;
+		if(rs.next()) {
+			UserMapper mapper = new UserMapper();
+			User user = mapper.mapRow(rs);
+			return user;
+		}
+		return null;		
 	}
 	
 	@Override
@@ -98,7 +102,11 @@ public class UserDAO implements DAO<User> {
 			pstmt.setString(k++, user.getEmail());
 			pstmt.setString(k++, user.getLocaleName());
 			pstmt.setString(k++, user.getRole().getName());
-			pstmt.setLong(k++, user.getRequestId());
+			if (user.getRequestId() != null) {
+				pstmt.setLong(k++, user.getRequestId());
+			} else {
+				pstmt.setNull(k++, java.sql.Types.INTEGER);
+			}
 			if (pstmt.executeUpdate() > 0) {
 				ResultSet rs = pstmt.getGeneratedKeys();
 				if (rs.next()) {
@@ -172,4 +180,19 @@ public class UserDAO implements DAO<User> {
     		return user;
         }
     }
+	
+	public String getPasswordByLogin(String login) {
+		PreparedStatement pstmt;
+		try {
+			pstmt = con.prepareStatement(SQL_GET_PASSWORD);
+			pstmt.setString(1, login);
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return rs.getString(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

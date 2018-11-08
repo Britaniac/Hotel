@@ -1,0 +1,14 @@
+<style>
+nav {
+	float: left;
+	width: 20%;
+	height:100%;
+	background: aqua;
+}
+</style>
+
+<nav>
+	<ul>
+		<li><a href="rooms">Available rooms</a></li>
+	</ul>
+</nav>

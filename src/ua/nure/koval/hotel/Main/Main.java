@@ -16,11 +16,8 @@ import ua.nure.koval.hotel.entity.enums.Status;
 public class Main {
 
 	public static void main(String...strings) throws SQLException {
-		RoomDAO rd = new RoomDAO();
-		Room room = rd.getById((long) (64));
-		room.setCost(299);
-		rd.delete(room);
-		
+		UserDAO ud = new UserDAO();
+		System.out.println(ud.getPasswordByLogin("sko"));
 	}
 
 	private static <T> void printList(List<T> list) {
