@@ -1,4 +1,4 @@
-package ua.nure.koval.hotel.service;
+package ua.nure.koval.hotel.util;
 
 import java.sql.SQLException;
 

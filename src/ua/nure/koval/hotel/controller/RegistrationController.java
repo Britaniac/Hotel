@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import ua.nure.koval.hotel.service.ParamValidation;
 import ua.nure.koval.hotel.service.UserService;
+import ua.nure.koval.hotel.util.ParamValidation;
 
 /**
  * Servlet implementation class RegistrationController
@@ -49,13 +49,15 @@ public class RegistrationController extends HttpServlet {
 		String email = request.getParameter("email");
 		String locale = "en";
 		HttpSession session = request.getSession(true);
-		if(pv.checkForMissing(login, password, fName, lName, email, locale)) {
+/*		if(pv.checkForMissing(login, password, fName, lName, email, locale)) {
 			String message = "One or more of the fields are empty";
 			session.setAttribute("message", message);
 		} else {
 			String message = us.registerUser(login, password, fName, lName, email, locale);
 			session.setAttribute("message", message);
-		}
+		}*/
+		String message = us.registerUser(login, password, fName, lName, email, locale);
+		session.setAttribute("message", message);
 		response.sendRedirect("register_user");
 	}
 	

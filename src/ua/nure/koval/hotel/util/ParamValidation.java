@@ -1,9 +1,14 @@
-package ua.nure.koval.hotel.service;
+package ua.nure.koval.hotel.util;
+
+import java.util.List;
 
 public class ParamValidation {
 	
-	public boolean checkForMissing(String... params){
+	public boolean checkForMissing(List<String> params){
 		boolean flag = false;
+		if (params.size() == 0) {
+			return flag;
+		}
 		for (String p: params) {
 			if (isMissing(p)) {
 				flag = true;

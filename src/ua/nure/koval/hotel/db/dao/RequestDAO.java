@@ -19,6 +19,8 @@ public class RequestDAO implements DAO<Request> {
 	private static final String SQL_INSERT_REQUEST = "INSERT INTO requests VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String SQL_UPDATE_REQUEST = "UPDATE request SET capacity=?, room_class=?, room_id=?, created=?, date_from=?, date_to=?, invoice_id=? where ID=?";
 	private static final String SQL_DELETE_REQUEST = "DELETE FROM request WHERE ID=?";
+	private static final String SQL_FIND_UNPAID = "SELECT requests.* FROM requests, invoices WHERE requests.invoice_id=invoices.ID AND invoices.paid=FALSE";
+	private static final String SQL_FIND_NEW = "SELECT * FROM requests WHERE invoice_id IS NULL";
 	
 	private static Connection con;
 	
@@ -37,13 +39,15 @@ public class RequestDAO implements DAO<Request> {
 			PreparedStatement pstmt = con.prepareStatement(SQL_FIND_BY_ID);
 			pstmt.setLong(1, id);
 			ResultSet rs = pstmt.executeQuery();
-			rs.next();
-			RequestMapper mapper = new RequestMapper();
-			req = mapper.mapRow(rs);
+			if (rs.next()) {
+				RequestMapper mapper = new RequestMapper();
+				req = mapper.mapRow(rs);
+				return req;
+			}
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return req;
+		return null;
 	}
 
 	@Override
@@ -158,7 +162,7 @@ public class RequestDAO implements DAO<Request> {
     		try {
     			req.setId(rs.getLong(k++));
     			req.setCapacity(rs.getInt(k++));
-    			req.setrClass(RoomClass.valueOf(rs.getString(k++)));
+    			req.setrClass(RoomClass.fromString(rs.getString(k++)));
     			req.setRoomId(rs.getLong(k++));
     			req.setCreated(rs.getDate(k++).toLocalDate());
     			req.setFrom(rs.getDate(k++).toLocalDate());
@@ -170,4 +174,36 @@ public class RequestDAO implements DAO<Request> {
     		return req;
         }
     }
+
+	public List<Request> getUnpaid() {
+		List<Request> reqs = new ArrayList<>();
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(SQL_FIND_UNPAID);
+			RequestMapper mapper = new RequestMapper();
+			while (rs.next()) {
+				Request req = mapper.mapRow(rs);
+				reqs.add(req);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return reqs;
+	}
+	
+	public List<Request> getNew() {
+		List<Request> reqs = new ArrayList<>();
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(SQL_FIND_NEW);
+			RequestMapper mapper = new RequestMapper();
+			while (rs.next()) {
+				Request req = mapper.mapRow(rs);
+				reqs.add(req);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return reqs;
+	}
 }

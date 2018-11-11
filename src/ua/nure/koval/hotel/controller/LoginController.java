@@ -2,6 +2,7 @@ package ua.nure.koval.hotel.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,10 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import ua.nure.koval.hotel.entity.Request;
 import ua.nure.koval.hotel.entity.User;
-import ua.nure.koval.hotel.service.Authentication;
-import ua.nure.koval.hotel.service.ParamValidation;
+import ua.nure.koval.hotel.service.RequestService;
 import ua.nure.koval.hotel.service.UserService;
+import ua.nure.koval.hotel.util.Authentication;
+import ua.nure.koval.hotel.util.ParamValidation;
 
 /**
  * Servlet implementation class LoginController
@@ -21,13 +24,13 @@ import ua.nure.koval.hotel.service.UserService;
 @WebServlet("/login_check")
 public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private ParamValidation pv = null;
 	private UserService us = null;
+	private RequestService rs = null;
 	
 	public LoginController() {
 		super();
-		pv = new ParamValidation();
 		us = new UserService();
+		rs = new RequestService();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,8 +40,15 @@ public class LoginController extends HttpServlet {
 			user = (User) session.getAttribute("user");
 		}
 		if (user.getRole().getName().equalsIgnoreCase("manager")) {
+			List<Request> requests = rs.getAllRequests();
+			request.setAttribute("requests", requests);
 			request.getRequestDispatcher("manager_cabinet.jsp").forward(request,response);
 		} else if (user.getRole().getName().equalsIgnoreCase("client")){
+			Request r = null;
+			if(user.getRequestId() != 0L) {
+				r = rs.getRequestById(user.getRequestId());
+			} 
+			session.setAttribute("userRequest", r);
 			request.getRequestDispatcher("client_cabinet.jsp").forward(request,response);
 		}
 	}
@@ -47,7 +57,7 @@ public class LoginController extends HttpServlet {
 		String login = request.getParameter("login");
 		String password = request.getParameter("password");
 		HttpSession session = request.getSession();
-		if (pv.checkForMissing(login, password)) {
+/*		if (pv.checkForMissing(login, password)) {
 			session.setAttribute("message", "Incorrect credentials");
 			request.getRequestDispatcher("show_message.jsp").forward(request,response);	
 		} else {
@@ -56,6 +66,12 @@ public class LoginController extends HttpServlet {
 				session.setAttribute("user", user);
 				response.sendRedirect("login_check");
 			}
+		}*/
+		if(Authentication.check(login, password)) {
+			User user = us.getUserByLogin(login);
+			System.out.println(user);
+			session.setAttribute("user", user);
+			response.sendRedirect("login_check");
 		}
 	}
 

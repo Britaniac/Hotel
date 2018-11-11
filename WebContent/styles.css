@@ -1,0 +1,15 @@
+body {
+	width:100%;
+    padding-bottom:10%;   /* Height of the footer */
+    background: #00ace6;   
+}
+table {
+    text-align: center;
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 70%;
+}
+td {
+	border: 1px solid black;
+    border-collapse: collapse;
+}

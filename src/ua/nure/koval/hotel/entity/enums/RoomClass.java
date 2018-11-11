@@ -8,6 +8,9 @@ public enum RoomClass {
 	}
 	
 	public static RoomClass fromString(String rClass) {
-		return RoomClass.valueOf(rClass.toUpperCase());
+		if(rClass != null) {
+			return RoomClass.valueOf(rClass.toUpperCase());
+		}
+		return null;
 	}
 }

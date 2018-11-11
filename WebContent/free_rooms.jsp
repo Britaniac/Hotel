@@ -1,19 +1,9 @@
 <%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
-<style>
-table {
-    text-align: center;
-    border: 1px solid black;
-    border-collapse: collapse;
-    width: 70%;
-}
-td {
-	border: 1px solid black;
-    border-collapse: collapse;
-}
-</style>
 <html>
-
+<head>
+  <link rel="stylesheet" href="styles.css">
+</head>
 <body>
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 <table>
