@@ -13,9 +13,7 @@
 <c:choose>
 <c:when test="${not empty request}">
 <p>Your request #<c:out value="${request.id}"/> is being processed</p>
-<c:set var="id" value="${request.id}"/>
-<c:set var="link" value="delete_request?id=${id}"/>
-<form action="${link}" method="post">
+<form action="delete_request" method="post">
 <input type="submit" value="Cancel"></input>
 </form>
 </c:when>

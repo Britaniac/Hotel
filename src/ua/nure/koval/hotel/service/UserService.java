@@ -43,4 +43,8 @@ public class UserService {
 		}
 		return null;
 	}
+
+	public boolean updateUser(User user) {
+		return ud.update(user);		
+	}
 }

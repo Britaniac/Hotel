@@ -25,19 +25,23 @@ public class ParameterValidationFilter implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		Enumeration<String> paramNames = request.getParameterNames();
-		ArrayList<String> paramValues = new ArrayList<>();
-		HttpServletRequest httpReq = (HttpServletRequest) request;
-		HttpSession session = httpReq.getSession();
-		while (paramNames.hasMoreElements()) {
-			String name = paramNames.nextElement();
-			paramValues.add(request.getParameter(name));
-		}
-		if(pv.checkForMissing(paramValues)) {
-			String message = "One or more of the parameters are missing";
-			session.setAttribute("message", message);
-			request.getRequestDispatcher("show_message.jsp").forward(request,response);
-		}
-		chain.doFilter(request, response);
+		if(!paramNames.hasMoreElements() || paramNames == null) {
+			chain.doFilter(request, response);
+		} else {
+			ArrayList<String> paramValues = new ArrayList<>();
+			HttpServletRequest httpReq = (HttpServletRequest) request;
+			HttpSession session = httpReq.getSession();
+			while (paramNames.hasMoreElements()) {
+				String name = paramNames.nextElement();
+				paramValues.add(request.getParameter(name));
+			}
+			if(pv.checkForMissing(paramValues)) {
+				String message = "One or more of the parameters are missing";
+				session.setAttribute("message", message);
+				request.getRequestDispatcher("show_message.jsp").forward(request,response);
+			}
+			chain.doFilter(request, response);
+		}	
 	}
 
 	/**

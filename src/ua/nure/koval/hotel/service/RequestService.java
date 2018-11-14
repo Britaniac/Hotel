@@ -27,4 +27,8 @@ public class RequestService {
 	public Request getRequestById(Long requestId) {
 		return rd.getById(requestId);
 	}
+
+	public boolean deleteRequest(Request req) {
+		return rd.delete(req);		
+	}
 }

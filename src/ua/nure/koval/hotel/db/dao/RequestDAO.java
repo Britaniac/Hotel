@@ -17,8 +17,8 @@ public class RequestDAO implements DAO<Request> {
 	private static final String SQL_FIND_BY_ID = "SELECT * FROM requests where ID=?";
 	private static final String SQL_FIND_ALL = "SELECT * FROM requests";
 	private static final String SQL_INSERT_REQUEST = "INSERT INTO requests VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String SQL_UPDATE_REQUEST = "UPDATE request SET capacity=?, room_class=?, room_id=?, created=?, date_from=?, date_to=?, invoice_id=? where ID=?";
-	private static final String SQL_DELETE_REQUEST = "DELETE FROM request WHERE ID=?";
+	private static final String SQL_UPDATE_REQUEST = "UPDATE requests SET capacity=?, room_class=?, room_id=?, created=?, date_from=?, date_to=?, invoice_id=? where ID=?";
+	private static final String SQL_DELETE_REQUEST = "DELETE FROM requests WHERE ID=?";
 	private static final String SQL_FIND_UNPAID = "SELECT requests.* FROM requests, invoices WHERE requests.invoice_id=invoices.ID AND invoices.paid=FALSE";
 	private static final String SQL_FIND_NEW = "SELECT * FROM requests WHERE invoice_id IS NULL";
 	
