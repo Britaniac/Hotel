@@ -1,0 +1,23 @@
+<%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
+<%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
+
+<form action="request" method="post">
+Room Capacity:<br>
+<input type="number" name="capacity" required="required" min="1" max="3">
+<br>
+Room Class:<br>
+<select name="class" required="required">
+<option value="standard">Standard</option>
+<option value="deluxe">Deluxe</option>
+<option value="suite">Suite</option>
+</select>
+<br>
+<br>
+Date from:<br>
+<input type="date" name="from" required="required">
+<br>
+<br>
+Date to:<br>
+<input type="date" name="to" required="required">
+<input type="submit" value="Submit"/>
+</form>
