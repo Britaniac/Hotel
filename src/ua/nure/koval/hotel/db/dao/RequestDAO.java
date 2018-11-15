@@ -17,10 +17,11 @@ public class RequestDAO implements DAO<Request> {
 	private static final String SQL_FIND_BY_ID = "SELECT * FROM requests where ID=?";
 	private static final String SQL_FIND_ALL = "SELECT * FROM requests";
 	private static final String SQL_INSERT_REQUEST = "INSERT INTO requests VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String SQL_UPDATE_REQUEST = "UPDATE requests SET capacity=?, room_class=?, room_id=?, created=?, date_from=?, date_to=?, invoice_id=? where ID=?";
+	private static final String SQL_UPDATE_REQUEST = "UPDATE requests SET capacity=?, room_class=?, room_id=?, created=?, date_from=?, date_to=?, user_id=? where ID=?";
 	private static final String SQL_DELETE_REQUEST = "DELETE FROM requests WHERE ID=?";
-	private static final String SQL_FIND_UNPAID = "SELECT requests.* FROM requests, invoices WHERE requests.invoice_id=invoices.ID AND invoices.paid=FALSE";
-	private static final String SQL_FIND_NEW = "SELECT * FROM requests WHERE invoice_id IS NULL";
+	private static final String SQL_FIND_UNPAID = "SELECT requests.* FROM requests, invoices WHERE invoices.request_id=requests.ID AND invoices.paid=FALSE";
+	private static final String SQL_FIND_NO_INVOICE = "SELECT requests.* FROM invoices, requests WHERE invoices.request_id!=requests.ID";
+	private static final String SQL_FIND_BY_USER_ID = "SELECT requests.* FROM requests WHERE user_id=?";
 	
 	private static Connection con;
 	
@@ -86,8 +87,8 @@ public class RequestDAO implements DAO<Request> {
 			pstmt.setDate(k++, Date.valueOf(req.getCreated()));
 			pstmt.setDate(k++, Date.valueOf(req.getFrom()));
 			pstmt.setDate(k++, Date.valueOf(req.getTo()));
-			if(req.getInvoiceId() != null) {
-				pstmt.setLong(k++, req.getInvoiceId());
+			if(req.getUserID() != null) {
+				pstmt.setLong(k++, req.getUserID());
 			} else {
 				pstmt.setNull(k++, java.sql.Types.INTEGER);
 			}
@@ -123,8 +124,8 @@ public class RequestDAO implements DAO<Request> {
 			pstmt.setDate(k++, Date.valueOf(req.getCreated()));
 			pstmt.setDate(k++, Date.valueOf(req.getFrom()));
 			pstmt.setDate(k++, Date.valueOf(req.getTo()));
-			if(req.getInvoiceId() != null) {
-				pstmt.setLong(k++, req.getInvoiceId());
+			if(req.getUserID() != null) {
+				pstmt.setLong(k++, req.getUserID());
 			} else {
 				pstmt.setNull(k++, java.sql.Types.INTEGER);
 			}
@@ -152,6 +153,22 @@ public class RequestDAO implements DAO<Request> {
 		}
 		return false;
 	}
+	
+	public List<Request> getUnprocessed(){
+		List<Request> reqs = new ArrayList<>();
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(SQL_FIND_NO_INVOICE);
+			RequestMapper mapper = new RequestMapper();
+			while (rs.next()) {
+				Request req = mapper.mapRow(rs);
+				reqs.add(req);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+		return reqs;
+	}
 
 	private static class RequestMapper implements EntityMapper<Request> {
 
@@ -167,7 +184,7 @@ public class RequestDAO implements DAO<Request> {
     			req.setCreated(rs.getDate(k++).toLocalDate());
     			req.setFrom(rs.getDate(k++).toLocalDate());
     			req.setTo(rs.getDate(k++).toLocalDate());
-    			req.setInvoiceId(rs.getLong(k++));
+    			req.setUserID(rs.getLong(k++));
     		} catch (SQLException e) {
     			e.printStackTrace();
     		}		
@@ -191,17 +208,18 @@ public class RequestDAO implements DAO<Request> {
 		return reqs;
 	}
 	
-	public List<Request> getNew() {
+	public List<Request> getByUserId(Long id){
 		List<Request> reqs = new ArrayList<>();
 		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(SQL_FIND_NEW);
+			PreparedStatement pstmt = con.prepareStatement(SQL_FIND_BY_USER_ID);
+			pstmt.setLong(1, id);
+			ResultSet rs = pstmt.executeQuery();
 			RequestMapper mapper = new RequestMapper();
 			while (rs.next()) {
 				Request req = mapper.mapRow(rs);
 				reqs.add(req);
 			}
-		} catch (SQLException e) {
+		} catch(SQLException e) {
 			e.printStackTrace();
 		}
 		return reqs;

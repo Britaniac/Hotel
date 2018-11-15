@@ -15,11 +15,11 @@ import ua.nure.koval.hotel.entity.enums.Role;
 public class UserDAO implements DAO<User> {
 	
 	private static final String SQL_FIND_ALL_USERS = "SELECT * FROM users";
-	private static final String SQL_INSERT_USER = "INSERT INTO users VALUES(DEFAULT, ?,?,?,?,?,?,?,?)";
+	private static final String SQL_INSERT_USER = "INSERT INTO users VALUES(DEFAULT, ?,?,?,?,?,?,?)";
 	private static final String SQL_FIND_USER_BY_LOGIN = "SELECT * FROM users WHERE login=?";
 	private static final String SQL_FIND_USER_BY_EMAIL = "SELECT * FROM users WHERE email=?";
 	private static final String SQL_FIND_USER_BY_ID = "SELECT * FROM users WHERE id=?";
-	private static final String SQL_UPDATE_USER = "UPDATE users SET login=?, password=?, first_name=?, last_name=?, email=?, locale=?, role=?, request_id=?"
+	private static final String SQL_UPDATE_USER = "UPDATE users SET login=?, password=?, first_name=?, last_name=?, email=?, locale=?, role=?"
 			+ "WHERE ID=?";
 	private static final String SQL_DELETE_USER = "DELETE FROM users WHERE id=?";
 	private static final String SQL_GET_PASSWORD = "SELECT password FROM users WHERE login=?";
@@ -102,11 +102,6 @@ public class UserDAO implements DAO<User> {
 			pstmt.setString(k++, user.getEmail());
 			pstmt.setString(k++, user.getLocaleName());
 			pstmt.setString(k++, user.getRole().getName());
-			if (user.getRequestId() != null) {
-				pstmt.setLong(k++, user.getRequestId());
-			} else {
-				pstmt.setNull(k++, java.sql.Types.INTEGER);
-			}
 			if (pstmt.executeUpdate() > 0) {
 				ResultSet rs = pstmt.getGeneratedKeys();
 				if (rs.next()) {
@@ -132,7 +127,6 @@ public class UserDAO implements DAO<User> {
 			pstmt.setString(k++, user.getEmail());
 			pstmt.setString(k++, user.getLocaleName());
 			pstmt.setString(k++, user.getRole().getName());
-			pstmt.setLong(k++, user.getRequestId());
 			pstmt.setLong(k++, user.getId());
 			if (pstmt.executeUpdate() > 0) {
 				return true;
@@ -173,7 +167,6 @@ public class UserDAO implements DAO<User> {
     			user.setEmail(rs.getString(k++));
     			user.setLocaleName(rs.getString(k++));
     			user.setRole(Role.fromString(rs.getString(k++)));
-    			user.setRequestId(rs.getLong(k++));
     		} catch (SQLException e) {
     			e.printStackTrace();
     		}		

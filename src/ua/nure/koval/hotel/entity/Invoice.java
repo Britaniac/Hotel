@@ -8,7 +8,14 @@ public class Invoice extends Entity {
 	private double sum;
 	private LocalDate created;
 	private boolean paid = false;
+	private Long requestID;
 	
+	public Long getRequestID() {
+		return requestID;
+	}
+	public void setRequestID(Long requestID) {
+		this.requestID = requestID;
+	}
 	public double getSum() {
 		return sum;
 	}

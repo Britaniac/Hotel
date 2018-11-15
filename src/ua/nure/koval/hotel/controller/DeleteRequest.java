@@ -40,9 +40,8 @@ public class DeleteRequest extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 		Request req = (Request) session.getAttribute("userRequest");
 		System.out.println(user);
-		if (user.getRequestId() == req.getId()) {
+		if (req.getUserID() == user.getId()) {
 			delete(req, session);
-			us.updateUser(user);
 		} else if (user.getRole().equals(Role.MANAGER)) {
 			delete(req, session);
 		}

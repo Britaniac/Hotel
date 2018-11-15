@@ -40,15 +40,12 @@ public class LoginController extends HttpServlet {
 			user = (User) session.getAttribute("user");
 		}
 		if (user.getRole().getName().equalsIgnoreCase("manager")) {
-			List<Request> requests = rs.getAllRequests();
+			List<Request> requests = rs.getUnprocessed();
 			request.setAttribute("requests", requests);
 			request.getRequestDispatcher("manager_cabinet.jsp").forward(request,response);
 		} else if (user.getRole().getName().equalsIgnoreCase("client")){
-			Request r = null;
-			if(user.getRequestId() != 0L) {
-				r = rs.getRequestById(user.getRequestId());
-			} 
-			session.setAttribute("userRequest", r);
+			List<Request> requests = rs.getByUser(user);
+			session.setAttribute("requests", requests);
 			request.getRequestDispatcher("client_cabinet.jsp").forward(request,response);
 		}
 	}

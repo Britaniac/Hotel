@@ -12,8 +12,16 @@ public class Request extends Entity {
 	private LocalDate created;
 	private LocalDate from;
 	private LocalDate to;
-	private Long invoiceId;
+	private Long userID;
 	
+	public Long getUserID() {
+		return userID;
+	}
+
+	public void setUserID(Long userID) {
+		this.userID = userID;
+	}
+
 	public Request() {
 		created = LocalDate.now();
 	}
@@ -55,14 +63,9 @@ public class Request extends Entity {
 	public void setCreated(LocalDate created) {
 		this.created = created;
 	}
-
-	public Long getInvoiceId() {
-		return invoiceId;
+	
+	public String toString() {
+		return "Request ID: " + getId();
 	}
 
-	public void setInvoiceId(Long invoiceId) {
-		this.invoiceId = invoiceId;
-	}
-	
-	
 }

@@ -1,6 +1,7 @@
 <%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 
+<c:set var="user" value="${sessionScope.user}"/>
 <table>
 <tr>
 <td>ID</td>
@@ -10,7 +11,8 @@
 <td>Date created</td>
 <td>From</td>
 <td>To</td>
-<td>Invoice</td>
+<td>User ID</td>
+<td>Action</td>
 </tr>
 <c:forEach items="${requests}" var="request">
 <tr>
@@ -21,17 +23,19 @@
 <td>${request.created}</td>
 <td>${request.from}</td>
 <td>${request.to}</td>
+<td>${request.userID}</td>
 <c:choose>
-<c:when test = "${request.invoiceId>0}">
-	<c:set var="id" value="${request.invoiceId}"/>
-	<c:set var="link" value="invoice?${id}"/>
-	<td><a href ="${link}">${request.invoiceId}</a></td>
+<c:when test="${user.role == 'CLIENT'}">
+<td><form action="delete_request"  method="post">
+<input type="submit" value="Cancel"></input>
+</form></td>
 </c:when>
-<c:otherwise>
-<td>
-<form action="invoice"><input type="submit" value="Create"/></form>
-</td>
-</c:otherwise>
+<c:when test="${user.role == 'MANAGER'}">
+<td><form action="delete_request"  method="post">
+<input type="submit" value="Cancel"></input>
+<input type="submit" value="Process" formaction="invoice"/>
+</form></td>
+</c:when>
 </c:choose>
 </tr>
 </c:forEach>

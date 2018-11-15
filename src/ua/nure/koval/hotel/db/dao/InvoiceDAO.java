@@ -15,8 +15,8 @@ import ua.nure.koval.hotel.entity.Invoice;
 public class InvoiceDAO implements DAO<Invoice> {
 	private static final String SQL_FIND_BY_ID = "SELECT * FROM invoices WHERE ID=?";
 	private static final String SQL_FIND_ALL = "SELECT * FROM invoices";
-	private static final String SQL_INSERT_INVOICE = "INSERT INTO invoices VALUES(DEFAULT, ?, ?, ?)";
-	private static final String SQL_UPDATE_INVOICE = "UPDATE invoices SET sum=?, created=?, paid=? WHERE ID=?";
+	private static final String SQL_INSERT_INVOICE = "INSERT INTO invoices VALUES(DEFAULT, ?, ?, ?, ?)";
+	private static final String SQL_UPDATE_INVOICE = "UPDATE invoices SET sum=?, created=?, paid=?, request_id=? WHERE ID=?";
 	private static final String SQL_DELETE_INVOICE = "DELETE FROM invoices WHERE ID=?";
 
 	private static Connection con;
@@ -71,6 +71,7 @@ public class InvoiceDAO implements DAO<Invoice> {
 			pstmt.setDouble(k++, inv.getSum());
 			pstmt.setDate(k++, Date.valueOf(inv.getCreated()));
 			pstmt.setBoolean(k++, inv.isPaid());
+			pstmt.setLong(k++, inv.getRequestID());
 			if (pstmt.executeUpdate() > 0) {
 				ResultSet rs = pstmt.getGeneratedKeys();
 				if (rs.next()) {
@@ -93,6 +94,7 @@ public class InvoiceDAO implements DAO<Invoice> {
 			pstmt.setDate(k++, Date.valueOf(inv.getCreated()));
 			pstmt.setLong(k++, inv.getId());
 			pstmt.setBoolean(k++, inv.isPaid());
+			pstmt.setLong(k++, inv.getRequestID());
 			if (pstmt.executeUpdate() > 0) {
 				return true;
 			}	
@@ -128,6 +130,7 @@ public class InvoiceDAO implements DAO<Invoice> {
     			inv.setSum(rs.getDouble(k++));
     			inv.setCreated(rs.getDate(k++).toLocalDate());
     			inv.setPaid(rs.getBoolean(k++));
+    			inv.setRequestID(rs.getLong(k++));
     		} catch (SQLException e) {
     			e.printStackTrace();
     		}		

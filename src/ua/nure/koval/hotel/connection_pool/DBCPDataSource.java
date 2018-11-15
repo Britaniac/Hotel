@@ -1,14 +1,7 @@
 package ua.nure.koval.hotel.connection_pool;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Properties;
-
-import javax.servlet.ServletContext;
-
 import org.apache.commons.dbcp2.BasicDataSource;
 
 public class DBCPDataSource {
@@ -19,10 +12,11 @@ public class DBCPDataSource {
 /*    		input = ClassLoader.class.getResourceAsStream("database.properties");
 		    		prop.load(input);*/
 		    		String url = "jdbc:mysql://localhost:3306/hotel_db";
+    				//String url = "jdbc:mysql://localhost:807/hotel_db";
 		    		String user = "root";
 		    		String password = "";
 		            ds.setUrl(url);
-		            //ds.setDriverClassName("com.mysql.jdbc.Driver");
+		            ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		            ds.setUsername(user);
 		            ds.setPassword(password);
 		            ds.setMinIdle(1);
