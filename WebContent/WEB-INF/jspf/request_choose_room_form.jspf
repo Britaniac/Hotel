@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 
-<form action="request" method="post">
+<form action="request_by_room" method="post">
 <select name="room" required="required">
 <c:forEach items="${rooms}" var="room">
 <option value="${room.id}">${room.capacity} person ${room.rClass} room - ${room.cost}$ per day</option>
@@ -9,11 +9,7 @@
 </select>
 <br>
 <br>
-Date from:<br>
-<input type="date" name="from" required="required">
-<br>
-<br>
 Date to:<br>
-<input type="date" name="to" required="required">
+<input type="date" name="to" required="required" min="${sessionScope.today}">
 <input type="submit" value="Submit"/>
 </form>

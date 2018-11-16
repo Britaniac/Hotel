@@ -8,7 +8,6 @@
 <td>Requested capacity</td>
 <td>Request class</td>
 <td>Room ID</td>
-<td>Date created</td>
 <td>From</td>
 <td>To</td>
 <td>User ID</td>
@@ -21,7 +20,6 @@
 <td>${request.rClass}</td>
 <td>${request.roomId}</td>
 <td>${request.created}</td>
-<td>${request.from}</td>
 <td>${request.to}</td>
 <td>${request.userID}</td>
 <c:choose>

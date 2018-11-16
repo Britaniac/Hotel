@@ -16,8 +16,8 @@ import ua.nure.koval.hotel.entity.enums.RoomClass;
 public class RequestDAO implements DAO<Request> {
 	private static final String SQL_FIND_BY_ID = "SELECT * FROM requests where ID=?";
 	private static final String SQL_FIND_ALL = "SELECT * FROM requests";
-	private static final String SQL_INSERT_REQUEST = "INSERT INTO requests VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String SQL_UPDATE_REQUEST = "UPDATE requests SET capacity=?, room_class=?, room_id=?, created=?, date_from=?, date_to=?, user_id=? where ID=?";
+	private static final String SQL_INSERT_REQUEST = "INSERT INTO requests VALUES(DEFAULT, ?, ?, ?, ?, ?, ?)";
+	private static final String SQL_UPDATE_REQUEST = "UPDATE requests SET capacity=?, room_class=?, room_id=?, created=?, date_to=?, user_id=? where ID=?";
 	private static final String SQL_DELETE_REQUEST = "DELETE FROM requests WHERE ID=?";
 	private static final String SQL_FIND_UNPAID = "SELECT requests.* FROM requests, invoices WHERE invoices.request_id=requests.ID AND invoices.paid=FALSE";
 	private static final String SQL_FIND_NO_INVOICE = "SELECT requests.* FROM invoices, requests WHERE invoices.request_id!=requests.ID";
@@ -85,7 +85,6 @@ public class RequestDAO implements DAO<Request> {
 				pstmt.setNull(k++, java.sql.Types.INTEGER);
 			}
 			pstmt.setDate(k++, Date.valueOf(req.getCreated()));
-			pstmt.setDate(k++, Date.valueOf(req.getFrom()));
 			pstmt.setDate(k++, Date.valueOf(req.getTo()));
 			if(req.getUserID() != null) {
 				pstmt.setLong(k++, req.getUserID());
@@ -122,7 +121,6 @@ public class RequestDAO implements DAO<Request> {
 				pstmt.setNull(k++, java.sql.Types.INTEGER);
 			}
 			pstmt.setDate(k++, Date.valueOf(req.getCreated()));
-			pstmt.setDate(k++, Date.valueOf(req.getFrom()));
 			pstmt.setDate(k++, Date.valueOf(req.getTo()));
 			if(req.getUserID() != null) {
 				pstmt.setLong(k++, req.getUserID());
@@ -182,7 +180,6 @@ public class RequestDAO implements DAO<Request> {
     			req.setrClass(RoomClass.fromString(rs.getString(k++)));
     			req.setRoomId(rs.getLong(k++));
     			req.setCreated(rs.getDate(k++).toLocalDate());
-    			req.setFrom(rs.getDate(k++).toLocalDate());
     			req.setTo(rs.getDate(k++).toLocalDate());
     			req.setUserID(rs.getLong(k++));
     		} catch (SQLException e) {

@@ -54,21 +54,14 @@ public class LoginController extends HttpServlet {
 		String login = request.getParameter("login");
 		String password = request.getParameter("password");
 		HttpSession session = request.getSession();
-/*		if (pv.checkForMissing(login, password)) {
-			session.setAttribute("message", "Incorrect credentials");
-			request.getRequestDispatcher("show_message.jsp").forward(request,response);	
-		} else {
-			if(Authentication.check(login, password)) {
-				User user = us.getUserByLogin(login);
-				session.setAttribute("user", user);
-				response.sendRedirect("login_check");
-			}
-		}*/
 		if(Authentication.check(login, password)) {
 			User user = us.getUserByLogin(login);
 			System.out.println(user);
 			session.setAttribute("user", user);
 			response.sendRedirect("login_check");
+		} else {
+			session.setAttribute("message", "Failure");
+			request.getRequestDispatcher("show_message.jsp").forward(request,response);
 		}
 	}
 

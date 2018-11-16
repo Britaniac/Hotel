@@ -10,7 +10,6 @@ public class Request extends Entity {
 	private RoomClass rClass;
 	private Long roomId;
 	private LocalDate created;
-	private LocalDate from;
 	private LocalDate to;
 	private Long userID;
 	
@@ -26,12 +25,6 @@ public class Request extends Entity {
 		created = LocalDate.now();
 	}
 	
-	public LocalDate getFrom() {
-		return from;
-	}
-	public void setFrom(LocalDate from) {
-		this.from = from;
-	}
 	public LocalDate getTo() {
 		return to;
 	}

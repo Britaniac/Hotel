@@ -19,7 +19,8 @@ public class RoomDAO implements DAO<Room> {
 	private static final String SQL_INSERT_ROOM = "INSERT INTO rooms (capacity, cost, class, status) VALUES(?,?,?,?)";
 	private static final String SQL_UPDATE_ROOM = "UPDATE rooms SET capacity=?, cost=?, class=?,status=? WHERE ID=?";
 	private static final String SQL_DELETE_ROOM = "DELETE FROM rooms WHERE ID=?";
-	Connection con;
+	private static final String SQL_FIND_BY_STATUS = "SELECT * FROM rooms where status=?";
+	private static Connection con;
 	
 	public RoomDAO() {
 		try {
@@ -116,6 +117,24 @@ public class RoomDAO implements DAO<Room> {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public List<Room> getByStatus(Status status){
+		List<Room> rooms = new ArrayList<>();
+		try {
+			PreparedStatement pstmt = con.prepareStatement(SQL_FIND_BY_STATUS);
+			int k = 1;
+			pstmt.setString(k++, status.getName());
+			ResultSet rs = pstmt.executeQuery();
+			RoomMapper mapper = new RoomMapper();
+			while (rs.next()) {
+				Room room = mapper.mapRow(rs);
+				rooms.add(room);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return rooms;
 	}
 	
 	static class RoomMapper implements EntityMapper<Room>{
