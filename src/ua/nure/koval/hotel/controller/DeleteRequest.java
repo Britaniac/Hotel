@@ -28,15 +28,6 @@ public class DeleteRequest extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		if (session.getAttribute("message") != null) {
-			request.getRequestDispatcher("show_message.jsp").forward(request,response);	
-		} else {
-			System.out.println("Something wrong");
-		}
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		Request req = (Request) session.getAttribute("userRequest");
 		System.out.println(user);
@@ -45,6 +36,10 @@ public class DeleteRequest extends HttpServlet {
 		} else if (user.getRole().equals(Role.MANAGER)) {
 			delete(req, session);
 		}
+		request.getRequestDispatcher("show_message.jsp").forward(request,response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.sendRedirect("delete_request");
 	}
 	

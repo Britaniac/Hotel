@@ -7,6 +7,7 @@ import ua.nure.koval.hotel.db.dao.RequestDAO;
 import ua.nure.koval.hotel.entity.Request;
 import ua.nure.koval.hotel.entity.Room;
 import ua.nure.koval.hotel.entity.User;
+import ua.nure.koval.hotel.entity.enums.RoomClass;
 
 public class RequestService {
 	RequestDAO rd = null;
@@ -51,5 +52,14 @@ public class RequestService {
 
 	private boolean save(Request r) {
 		return rd.save(r);
+	}
+
+	public boolean createFromParams(int capacity, RoomClass rClass, LocalDate date, Long id) {
+		Request r = new Request();
+		r.setCapacity(capacity);
+		r.setrClass(rClass);
+		r.setTo(date);
+		r.setUserID(id);
+		return save(r);
 	}
 }
