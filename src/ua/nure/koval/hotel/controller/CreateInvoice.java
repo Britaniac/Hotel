@@ -6,29 +6,39 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import ua.nure.koval.hotel.service.RequestService;
+import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class RequestController
+ * Servlet implementation class CreateInvoice
  */
-@WebServlet("/request")
-public class RequestController extends HttpServlet {
+@WebServlet("/create_invoice")
+public class CreateInvoice extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	RequestService rs = null;
-
-    public RequestController() {
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public CreateInvoice() {
         super();
-        rs = new RequestService();
+        // TODO Auto-generated constructor stub
     }
 
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+//		HttpSession session = request.getSession();
+//		Request req = 
+//		Long roomId = Long.parseLong(request.getParameter("room"));
+		
 	}
 
 }

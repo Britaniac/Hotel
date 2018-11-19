@@ -21,7 +21,9 @@ public class DBCPDataSource {
 		            ds.setPassword(password);
 		            ds.setMinIdle(1);
 		            ds.setMaxIdle(5);
-		            ds.setMaxOpenPreparedStatements(100); 
+		            ds.setMaxOpenPreparedStatements(100);
+		            ds.setRemoveAbandonedOnMaintenance(true);
+		            ds.setRemoveAbandonedTimeout(60);
     }
   
     public static Connection getConnection() throws SQLException {

@@ -28,34 +28,30 @@ public class CreateRequestFromParams extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("user");
-		int capacity = (int) session.getAttribute("capacity");
-		RoomClass rClass = (RoomClass) session.getAttribute("class");
-		LocalDate date = (LocalDate) session.getAttribute("date");
-		if (reqServ.createFromParams(capacity, rClass, date, user.getId())) {
-			session.setAttribute("message", "Success");
-			request.getRequestDispatcher("show_message.jsp").forward(request,response);
-		} else {
-			session.setAttribute("message", "Failure");
-			request.getRequestDispatcher("show_message.jsp").forward(request,response);
-		}
+		request.getRequestDispatcher("show_message.jsp").forward(request,response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		process(request, response);
+		response.sendRedirect("request_by_params");
+	}
+
+	private void process(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
-		if (request.getParameter("capacity") == null || request.getParameter("class") == null || request.getParameter("to") == null) {
+		if (request.getParameter("capacity") == null || request.getParameter("class") == null || request.getParameter("duration") == null) {
 			session.setAttribute("message", "Failure");
-			request.getRequestDispatcher("show_message.jsp").forward(request,response);
 		} else {
 			int capacity = Integer.parseInt(request.getParameter("capacity"));
 			RoomClass rClass = RoomClass.fromString(request.getParameter("class"));
-			LocalDate date = LocalDate.parse(request.getParameter("to"));
-			session.setAttribute("capacity", capacity);
-			session.setAttribute("class", rClass);
-			session.setAttribute("date", date);
-			response.sendRedirect("request_by_params");			
-		}
+			int duration = Integer.parseInt(request.getParameter("duration"));
+			User user = (User) session.getAttribute("user");
+			if (reqServ.createFromParams(capacity, rClass, duration, user.getId())) {
+				session.setAttribute("message", "Success");
+			} else {
+				session.setAttribute("message", "Failure");
+			}
+		}		
 	}
+	
 
 }

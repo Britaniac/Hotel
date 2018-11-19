@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import ua.nure.koval.hotel.entity.Invoice;
 import ua.nure.koval.hotel.entity.Request;
 import ua.nure.koval.hotel.entity.User;
+import ua.nure.koval.hotel.service.InvoiceService;
 import ua.nure.koval.hotel.service.RequestService;
 import ua.nure.koval.hotel.service.UserService;
 import ua.nure.koval.hotel.util.Authentication;
@@ -26,11 +28,13 @@ public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UserService us = null;
 	private RequestService rs = null;
+	private InvoiceService invServ = null;
 	
 	public LoginController() {
 		super();
 		us = new UserService();
 		rs = new RequestService();
+		invServ = new InvoiceService();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -45,8 +49,12 @@ public class LoginController extends HttpServlet {
 			request.getRequestDispatcher("manager_cabinet.jsp").forward(request,response);
 		} else if (user.getRole().getName().equalsIgnoreCase("client")){
 			List<Request> requests = rs.getByUser(user);
+			List<Invoice> invoices = invServ.getByUser(user);
 			session.setAttribute("requests", requests);
+			session.setAttribute("invoices", invoices);
 			request.getRequestDispatcher("client_cabinet.jsp").forward(request,response);
+		} else {
+			request.getRequestDispatcher("show_message.jsp").forward(request,response);
 		}
 	}
 
@@ -58,11 +66,10 @@ public class LoginController extends HttpServlet {
 			User user = us.getUserByLogin(login);
 			System.out.println(user);
 			session.setAttribute("user", user);
-			response.sendRedirect("login_check");
 		} else {
 			session.setAttribute("message", "Failure");
-			request.getRequestDispatcher("show_message.jsp").forward(request,response);
 		}
+		response.sendRedirect("login_check");
 	}
 
 }

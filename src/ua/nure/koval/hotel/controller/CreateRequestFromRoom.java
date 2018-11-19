@@ -32,34 +32,30 @@ public class CreateRequestFromRoom extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		Long roomId = (Long) session.getAttribute("roomId");
-		LocalDate to = (LocalDate) session.getAttribute("date");
-		Room room = roomServ.getById(roomId);
-		room.setStatus(Status.BOOKED);
-		roomServ.updateRoom(room);
-		User user = (User) session.getAttribute("user");
-		if (reqServ.createFromRoom(room, to, user.getId())) {
-			session.setAttribute("message", "Success");
-			request.getRequestDispatcher("show_message.jsp").forward(request,response);
-		} else {
-			session.setAttribute("message", "Failure");
-			request.getRequestDispatcher("show_message.jsp").forward(request,response);
-		}
+		request.getRequestDispatcher("show_message.jsp").forward(request,response);		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		process(request, response);
+		response.sendRedirect("request_by_room");
+	}
+	
+	private void process(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
-		if (request.getParameter("room") == null || request.getParameter("to") == null) {
+		if (request.getParameter("room") == null || request.getParameter("duration") == null) {
 			session.setAttribute("message", "Failure");
-			request.getRequestDispatcher("show_message.jsp").forward(request,response);
 		} else {
 			Long roomId = Long.parseLong(request.getParameter("room"));
-			String date = request.getParameter("to");
-			LocalDate to = LocalDate.parse(date);
-			session.setAttribute("roomId", roomId);
-			session.setAttribute("date", to);
-			response.sendRedirect("request_by_room");
+			int duration = Integer.parseInt(request.getParameter("duration"));
+			Room room = roomServ.getById(roomId);
+			room.setStatus(Status.BOOKED);
+			roomServ.updateRoom(room);
+			User user = (User) session.getAttribute("user");
+			if (reqServ.createFromRoom(room, duration, user.getId())) {
+				session.setAttribute("message", "Success");				
+			} else {
+				session.setAttribute("message", "Failure");
+			}
 		}
 	}
 

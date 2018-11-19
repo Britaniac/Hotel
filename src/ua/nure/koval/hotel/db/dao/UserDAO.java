@@ -24,52 +24,56 @@ public class UserDAO implements DAO<User> {
 	private static final String SQL_DELETE_USER = "DELETE FROM users WHERE id=?";
 	private static final String SQL_GET_PASSWORD = "SELECT password FROM users WHERE login=?";
 	
-	private static Connection con;
-	
-	public UserDAO() {
-		try {
-			con = DBManager.getInstance().getConnection();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	@Override
 	public List<User> getAll() {
 		List<User> users = new ArrayList<>();
-		try {
-			Statement stmt = con.createStatement();
+		try (Connection con = DBManager.getInstance().getConnection();
+			Statement stmt = con.createStatement()){
 			ResultSet rs = stmt.executeQuery(SQL_FIND_ALL_USERS);
 			UserMapper mapper = new UserMapper();
 			while (rs.next()) {
 				User user = mapper.mapRow(rs);
 				users.add(user);
 			}
+/*			stmt.close();
+			con.close();*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return users;
 	}
 	
-	public User findByLogin(String login) throws SQLException {
-		PreparedStatement pstmt = con.prepareStatement(SQL_FIND_USER_BY_LOGIN);
-		pstmt.setString(1, login);
-		ResultSet rs = pstmt.executeQuery();
-		if (rs.next()) {
-			UserMapper mapper = new UserMapper();
-			return mapper.mapRow(rs);
+	public User findByLogin(String login) {
+		try (Connection con = DBManager.getInstance().getConnection();
+			PreparedStatement pstmt = con.prepareStatement(SQL_FIND_USER_BY_LOGIN)){
+			pstmt.setString(1, login);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				UserMapper mapper = new UserMapper();
+				return mapper.mapRow(rs);
+			}
+/*			pstmt.close();
+			con.close();*/
+		} catch (SQLException e) {
+
 		}
 		return null;
 	}
 	
-	public User findByEmail(String email) throws SQLException {
-		PreparedStatement pstmt = con.prepareStatement(SQL_FIND_USER_BY_EMAIL);
-		pstmt.setString(1, email);
-		ResultSet rs = pstmt.executeQuery();
-		if(rs.next()) {
-			UserMapper mapper = new UserMapper();
-			User user = mapper.mapRow(rs);
-			return user;
+	public User findByEmail(String email) {
+		try (Connection con = DBManager.getInstance().getConnection();
+			PreparedStatement pstmt = con.prepareStatement(SQL_FIND_USER_BY_EMAIL)){			
+			pstmt.setString(1, email);
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				UserMapper mapper = new UserMapper();
+				User user = mapper.mapRow(rs);
+				return user;
+			}
+/*			pstmt.close();
+			con.close();*/
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return null;		
 	}
@@ -77,13 +81,15 @@ public class UserDAO implements DAO<User> {
 	@Override
 	public User getById(Long id) {
 		User user = new User();
-		try {
-			PreparedStatement pstmt = con.prepareStatement(SQL_FIND_USER_BY_ID);
+		try (Connection con = DBManager.getInstance().getConnection();
+			PreparedStatement pstmt = con.prepareStatement(SQL_FIND_USER_BY_ID)){
 			pstmt.setLong(1, id);
 			ResultSet rs = pstmt.executeQuery();
 			rs.next();
 			UserMapper mapper = new UserMapper();
 			user = mapper.mapRow(rs);
+/*			pstmt.close();
+			con.close();*/
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -92,8 +98,8 @@ public class UserDAO implements DAO<User> {
 
 	@Override
 	public boolean save(User user){
-		try {
-			PreparedStatement pstmt = con.prepareStatement(SQL_INSERT_USER, Statement.RETURN_GENERATED_KEYS);
+		try (Connection con = DBManager.getInstance().getConnection();
+			PreparedStatement pstmt = con.prepareStatement(SQL_INSERT_USER, Statement.RETURN_GENERATED_KEYS)){
 			int k = 1;
 			pstmt.setString(k++, user.getLogin());
 			pstmt.setString(k++, user.getPassword());
@@ -108,7 +114,9 @@ public class UserDAO implements DAO<User> {
 					user.setId(rs.getLong(1));
 					return true;
 				}
-			}			
+			}	
+/*			pstmt.close();
+			con.close();*/
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -117,8 +125,8 @@ public class UserDAO implements DAO<User> {
 
 	@Override
 	public boolean update(User user) {
-		try {
-			PreparedStatement pstmt = con.prepareStatement(SQL_UPDATE_USER);
+		try (Connection con = DBManager.getInstance().getConnection();
+			PreparedStatement pstmt = con.prepareStatement(SQL_UPDATE_USER)){
 			int k = 1;
 			pstmt.setString(k++, user.getLogin());
 			pstmt.setString(k++, user.getPassword());
@@ -130,7 +138,9 @@ public class UserDAO implements DAO<User> {
 			pstmt.setLong(k++, user.getId());
 			if (pstmt.executeUpdate() > 0) {
 				return true;
-			}			
+			}	
+/*			pstmt.close();
+			con.close();*/
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -139,13 +149,15 @@ public class UserDAO implements DAO<User> {
 
 	@Override
 	public boolean delete(User user) {
-		try {
-			PreparedStatement pstmt = con.prepareStatement(SQL_DELETE_USER);
+		try (Connection con = DBManager.getInstance().getConnection();
+			PreparedStatement pstmt = con.prepareStatement(SQL_DELETE_USER)){
 			int k = 1;
 			pstmt.setLong(k++, user.getId());
 			if (pstmt.executeUpdate() > 0) {
 				return true;
-			}			
+			}	
+/*			pstmt.close();
+			con.close();*/
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -175,14 +187,15 @@ public class UserDAO implements DAO<User> {
     }
 	
 	public String getPasswordByLogin(String login) {
-		PreparedStatement pstmt;
-		try {
-			pstmt = con.prepareStatement(SQL_GET_PASSWORD);
+		try (Connection con = DBManager.getInstance().getConnection();
+			PreparedStatement pstmt = con.prepareStatement(SQL_GET_PASSWORD)){
 			pstmt.setString(1, login);
 			ResultSet rs = pstmt.executeQuery();
 			if(rs.next()) {
 				return rs.getString(1);
 			}
+/*			pstmt.close();
+			con.close();*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

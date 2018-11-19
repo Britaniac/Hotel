@@ -18,28 +18,20 @@ public class InvoiceDAO implements DAO<Invoice> {
 	private static final String SQL_INSERT_INVOICE = "INSERT INTO invoices VALUES(DEFAULT, ?, ?, ?, ?)";
 	private static final String SQL_UPDATE_INVOICE = "UPDATE invoices SET sum=?, created=?, paid=?, request_id=? WHERE ID=?";
 	private static final String SQL_DELETE_INVOICE = "DELETE FROM invoices WHERE ID=?";
+	private static final String SQL_FIND_BY_USER_ID = "SELECT invoices.* FROM requests, invoices WHERE requests.user_id=? AND invoices.request_id=requests.ID";
 
-	private static Connection con;
-	
-	public InvoiceDAO() {
-		try {
-			con = DBManager.getInstance().getConnection();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	@Override
 	public Invoice getById(Long id) {
 		Invoice inv = new Invoice();
-		try {
-			PreparedStatement pstmt = con.prepareStatement(SQL_FIND_BY_ID);
+		try (Connection con = DBManager.getInstance().getConnection(); PreparedStatement pstmt = con.prepareStatement(SQL_FIND_BY_ID)){
 			int k = 1;
 			pstmt.setLong(k++, id);
 			ResultSet rs = pstmt.executeQuery();
 			rs.next();
 			InvoiceMapper mapper = new InvoiceMapper();
 			inv = mapper.mapRow(rs);
+/*			pstmt.close();
+			con.close();*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -49,14 +41,15 @@ public class InvoiceDAO implements DAO<Invoice> {
 	@Override
 	public List<Invoice> getAll() {
 		List<Invoice> invoices = new ArrayList<>();
-		try {
-			PreparedStatement pstmt = con.prepareStatement(SQL_FIND_ALL);
+		try(Connection con = DBManager.getInstance().getConnection(); PreparedStatement pstmt = con.prepareStatement(SQL_FIND_ALL)){
 			ResultSet rs = pstmt.executeQuery();
 			InvoiceMapper mapper = new InvoiceMapper();
 			while (rs.next()) {
 				Invoice inv = mapper.mapRow(rs);
 				invoices.add(inv);
 			}
+		/*	pstmt.close();
+			con.close();*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -65,8 +58,7 @@ public class InvoiceDAO implements DAO<Invoice> {
 
 	@Override
 	public boolean save(Invoice inv) {
-		try {
-			PreparedStatement pstmt = con.prepareStatement(SQL_INSERT_INVOICE, Statement.RETURN_GENERATED_KEYS);
+		try (Connection con = DBManager.getInstance().getConnection(); PreparedStatement pstmt = con.prepareStatement(SQL_INSERT_INVOICE, Statement.RETURN_GENERATED_KEYS)){
 			int k = 1;
 			pstmt.setDouble(k++, inv.getSum());
 			pstmt.setDate(k++, Date.valueOf(inv.getCreated()));
@@ -78,7 +70,10 @@ public class InvoiceDAO implements DAO<Invoice> {
 					inv.setId(rs.getLong(1));
 					return true;
 				}
+				rs.close();
 			}	
+		/*	pstmt.close();
+			con.close();*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -87,8 +82,7 @@ public class InvoiceDAO implements DAO<Invoice> {
 
 	@Override
 	public boolean update(Invoice inv) {
-		try {
-			PreparedStatement pstmt = con.prepareStatement(SQL_UPDATE_INVOICE);
+		try (Connection con = DBManager.getInstance().getConnection(); PreparedStatement pstmt = con.prepareStatement(SQL_UPDATE_INVOICE)){
 			int k = 1;
 			pstmt.setDouble(k++, inv.getSum());
 			pstmt.setDate(k++, Date.valueOf(inv.getCreated()));
@@ -98,6 +92,8 @@ public class InvoiceDAO implements DAO<Invoice> {
 			if (pstmt.executeUpdate() > 0) {
 				return true;
 			}	
+/*			pstmt.close();
+			con.close();*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -106,13 +102,14 @@ public class InvoiceDAO implements DAO<Invoice> {
 
 	@Override
 	public boolean delete(Invoice inv) {
-		try {
-			PreparedStatement pstmt = con.prepareStatement(SQL_DELETE_INVOICE);
+		try (Connection con = DBManager.getInstance().getConnection(); PreparedStatement pstmt = con.prepareStatement(SQL_DELETE_INVOICE)){
 			int k = 1;
 			pstmt.setLong(k++, inv.getId());
 			if (pstmt.executeUpdate() > 0) {
 				return true;
 			}	
+/*			pstmt.close();
+			con.close();*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -137,4 +134,21 @@ public class InvoiceDAO implements DAO<Invoice> {
     		return inv;
         }
     }
+
+	public List<Invoice> getByUserId(Long id) {
+		List<Invoice> invoices = new ArrayList<>();
+		try (Connection con = DBManager.getInstance().getConnection(); PreparedStatement pstmt = con.prepareStatement(SQL_FIND_BY_USER_ID)){
+			int k = 1;
+			pstmt.setLong(k++, id);
+			ResultSet rs = pstmt.executeQuery();
+			InvoiceMapper mapper = new InvoiceMapper();
+			while (rs.next()) {
+				Invoice inv = mapper.mapRow(rs);
+				invoices.add(inv);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return invoices;
+	}
 }

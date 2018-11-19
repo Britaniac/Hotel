@@ -10,7 +10,8 @@ public class Request extends Entity {
 	private RoomClass rClass;
 	private Long roomId;
 	private LocalDate created;
-	private LocalDate to;
+	//private LocalDate to;
+	private int duration;
 	private Long userID;
 	
 	public Long getUserID() {
@@ -25,12 +26,12 @@ public class Request extends Entity {
 		created = LocalDate.now();
 	}
 	
-	public LocalDate getTo() {
+/*	public LocalDate getTo() {
 		return to;
 	}
 	public void setTo(LocalDate to) {
 		this.to = to;
-	}
+	}*/
 	
 	public int getCapacity() {
 		return capacity;
@@ -59,6 +60,14 @@ public class Request extends Entity {
 	
 	public String toString() {
 		return "Request ID: " + getId();
+	}
+
+	public int getDuration() {
+		return duration;
+	}
+
+	public void setDuration(int duration) {
+		this.duration = duration;
 	}
 
 }

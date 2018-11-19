@@ -8,58 +8,73 @@ import ua.nure.koval.hotel.entity.Request;
 import ua.nure.koval.hotel.entity.Room;
 import ua.nure.koval.hotel.entity.User;
 import ua.nure.koval.hotel.entity.enums.RoomClass;
+import ua.nure.koval.hotel.entity.enums.Status;
 
 public class RequestService {
-	RequestDAO rd = null;
+	RequestDAO reqDao = null;
+	RoomService roomServ = null;
+	InvoiceService invServ = null;
 	
 	public RequestService() {
-		rd = new RequestDAO();
+		reqDao = new RequestDAO();
+		roomServ = new RoomService();
+		invServ = new InvoiceService();
 	}
 	
 	public List<Request> getAllRequests() {
-		return rd.getAll();
+		return reqDao.getAll();
 	}
 	
 	public List<Request> getUnpaidRequests(){
-		return rd.getUnpaid();
+		return reqDao.getUnpaid();
 	}
 	
 	public List<Request> getByUser(User user){
-		return rd.getByUserId(user.getId());
+		return reqDao.getByUserId(user.getId());
 	}
 
 	public Request getRequestById(Long requestId) {
-		return rd.getById(requestId);
+		return reqDao.getById(requestId);
 	}
 
 	public boolean deleteRequest(Request req) {
-		return rd.delete(req);		
+		if (req.getRoomId() != 0L || req.getRoomId() != null) {
+			roomServ.updateStatus(req.getRoomId(), Status.FREE);
+		}
+		return reqDao.delete(req);		
 	}
 
 	public List<Request> getUnprocessed() {
-		return rd.getUnprocessed();
+		if (invServ.getAllInvoices().size() < 1) {
+			return reqDao.getAll();
+		}
+		return reqDao.getUnprocessed();
 	}
 
-	public boolean createFromRoom(Room room, LocalDate to, Long userId) {
+	public boolean createFromRoom(Room room, int duration, Long userId) {
 		Request r = new Request();
 		r.setCapacity(room.getCapacity());
 		r.setrClass(room.getrClass());
 		r.setRoomId(room.getId());
-		r.setTo(to);
+		r.setDuration(duration);
 		r.setUserID(userId);
 		return save(r);	
 	}
 
 	private boolean save(Request r) {
-		return rd.save(r);
+		return reqDao.save(r);
 	}
 
-	public boolean createFromParams(int capacity, RoomClass rClass, LocalDate date, Long id) {
+	public boolean createFromParams(int capacity, RoomClass rClass, int duration, Long id) {
 		Request r = new Request();
 		r.setCapacity(capacity);
 		r.setrClass(rClass);
-		r.setTo(date);
+		r.setDuration(duration);
 		r.setUserID(id);
 		return save(r);
+	}
+
+	public boolean updateRequest(Request req) {
+		return reqDao.update(req);		
 	}
 }

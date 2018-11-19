@@ -1,0 +1,25 @@
+<%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
+<%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
+
+<table>
+<tr>
+<td>ID</td>
+<td>Payment sum</td>
+<td>Created</td>
+<td>For request</td>
+<td>Action</td>
+</tr>
+<c:forEach items="${invoices}" var="invoice">
+<tr>
+<td>${invoice.id}</td>
+<td>${invoice.sum}</td>
+<td>${invoice.created}</td>
+<td>${invoice.requestID}</td>
+<td>
+<form action="payment?id=${invoice.id}" method="post">
+<input type="submit" value="Pay">
+</form>
+</td>
+</tr>
+</c:forEach>
+</table>

@@ -20,26 +20,19 @@ public class RoomDAO implements DAO<Room> {
 	private static final String SQL_UPDATE_ROOM = "UPDATE rooms SET capacity=?, cost=?, class=?,status=? WHERE ID=?";
 	private static final String SQL_DELETE_ROOM = "DELETE FROM rooms WHERE ID=?";
 	private static final String SQL_FIND_BY_STATUS = "SELECT * FROM rooms where status=?";
-	private static Connection con;
-	
-	public RoomDAO() {
-		try {
-			con = DBManager.getInstance().getConnection();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+	private static final String SQL_UPDATE_STATUS = "UPDATE room SET status=? WHERE ID=?";
 
 	@Override
 	public Room getById(Long id) {
 		Room room = new Room();
-		try {
-			PreparedStatement pstmt = con.prepareStatement(SQL_FIND_BY_ID);
+		try (Connection con = DBManager.getInstance().getConnection();
+				PreparedStatement pstmt = con.prepareStatement(SQL_FIND_BY_ID)){
 			pstmt.setLong(1, id);
 			ResultSet rs = pstmt.executeQuery();
-			rs.next();
-			RoomMapper mapper = new RoomMapper();
-			room = mapper.mapRow(rs);
+			while (rs.next()) {
+				RoomMapper mapper = new RoomMapper();
+				room = mapper.mapRow(rs);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -49,14 +42,16 @@ public class RoomDAO implements DAO<Room> {
 	@Override
 	public List<Room> getAll() {
 		List<Room> rooms = new ArrayList<>();
-		try {
-			Statement stmt = con.createStatement();
+		try (Connection con = DBManager.getInstance().getConnection();
+			Statement stmt = con.createStatement()){
 			ResultSet rs = stmt.executeQuery(SQL_FIND_ALL_ROOMS);
 			RoomMapper mapper = new RoomMapper();
 			while (rs.next()) {
 				Room room = mapper.mapRow(rs);
 				rooms.add(room);
 			}
+/*			stmt.close();
+			con.close();*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -65,8 +60,8 @@ public class RoomDAO implements DAO<Room> {
 
 	@Override
 	public boolean save(Room room) {
-		try {
-			PreparedStatement pstmt = con.prepareStatement(SQL_INSERT_ROOM, Statement.RETURN_GENERATED_KEYS);
+		try (Connection con = DBManager.getInstance().getConnection();
+			PreparedStatement pstmt = con.prepareStatement(SQL_INSERT_ROOM, Statement.RETURN_GENERATED_KEYS)){
 			int k = 1;
 			pstmt.setInt(k++, room.getCapacity());
 			pstmt.setDouble(k++, room.getCost());
@@ -78,7 +73,9 @@ public class RoomDAO implements DAO<Room> {
 					room.setId(rs.getLong(1));
 					return true;
 				}
-			}			
+			}
+/*			pstmt.close();
+			con.close();*/
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -87,8 +84,8 @@ public class RoomDAO implements DAO<Room> {
 
 	@Override
 	public boolean update(Room room) {
-		try {
-			PreparedStatement pstmt = con.prepareStatement(SQL_UPDATE_ROOM);
+		try (Connection con = DBManager.getInstance().getConnection();
+			PreparedStatement pstmt = con.prepareStatement(SQL_UPDATE_ROOM)){
 			int k = 1;
 			pstmt.setInt(k++, room.getCapacity());
 			pstmt.setDouble(k++, room.getCost());
@@ -98,6 +95,8 @@ public class RoomDAO implements DAO<Room> {
 			if (pstmt.executeUpdate() > 0) {
 				return true;
 			}
+/*			pstmt.close();
+			con.close();*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -106,13 +105,15 @@ public class RoomDAO implements DAO<Room> {
 
 	@Override
 	public boolean delete(Room room) {
-		try {
-			PreparedStatement pstmt = con.prepareStatement(SQL_DELETE_ROOM);
+		try (Connection con = DBManager.getInstance().getConnection();
+			PreparedStatement pstmt = con.prepareStatement(SQL_DELETE_ROOM)){
 			int k = 1;
 			pstmt.setLong(k++, room.getId());
 			if (pstmt.executeUpdate() > 0) {
 				return true;
 			}
+/*			pstmt.close();
+			con.close();*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -121,8 +122,8 @@ public class RoomDAO implements DAO<Room> {
 	
 	public List<Room> getByStatus(Status status){
 		List<Room> rooms = new ArrayList<>();
-		try {
-			PreparedStatement pstmt = con.prepareStatement(SQL_FIND_BY_STATUS);
+		try (Connection con = DBManager.getInstance().getConnection();
+				PreparedStatement pstmt = con.prepareStatement(SQL_FIND_BY_STATUS)){
 			int k = 1;
 			pstmt.setString(k++, status.getName());
 			ResultSet rs = pstmt.executeQuery();
@@ -131,6 +132,8 @@ public class RoomDAO implements DAO<Room> {
 				Room room = mapper.mapRow(rs);
 				rooms.add(room);
 			}
+/*			pstmt.close();
+			con.close();*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -155,6 +158,21 @@ public class RoomDAO implements DAO<Room> {
 			return room;
 		}
 		
+	}
+
+	public boolean updateStatus(Long roomId, Status status) {
+		try (Connection con = DBManager.getInstance().getConnection();
+				PreparedStatement pstmt = con.prepareStatement(SQL_UPDATE_STATUS)){
+			int k = 1;
+			pstmt.setString(k++, status.getName());
+			pstmt.setLong(k++, roomId);
+			if (pstmt.executeUpdate() > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 }

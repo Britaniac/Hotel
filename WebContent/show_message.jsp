@@ -3,6 +3,6 @@
 <html>
 <body>
 <c:out value="${sessionScope.message}"/>
-<a href="login.jsp">Bach to the title</a>
+<a href="login_check">Go back</a>
 </body>
 </html>

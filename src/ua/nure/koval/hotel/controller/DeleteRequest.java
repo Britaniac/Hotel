@@ -27,19 +27,19 @@ public class DeleteRequest extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getRequestDispatcher("show_message.jsp").forward(request,response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
+		Long id = Long.parseLong(request.getParameter("id"));
+		Request req = rs.getRequestById(id);
 		User user = (User) session.getAttribute("user");
-		Request req = (Request) session.getAttribute("userRequest");
-		System.out.println(user);
 		if (req.getUserID() == user.getId()) {
 			delete(req, session);
 		} else if (user.getRole().equals(Role.MANAGER)) {
 			delete(req, session);
 		}
-		request.getRequestDispatcher("show_message.jsp").forward(request,response);
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.sendRedirect("delete_request");
 	}
 	

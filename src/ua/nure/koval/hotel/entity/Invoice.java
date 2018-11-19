@@ -10,6 +10,10 @@ public class Invoice extends Entity {
 	private boolean paid = false;
 	private Long requestID;
 	
+	public Invoice() {
+		created = LocalDate.now();
+	}
+	
 	public Long getRequestID() {
 		return requestID;
 	}

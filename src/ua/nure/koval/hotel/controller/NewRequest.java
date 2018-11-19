@@ -2,6 +2,8 @@ package ua.nure.koval.hotel.controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -15,6 +17,9 @@ import ua.nure.koval.hotel.entity.Room;
 import ua.nure.koval.hotel.entity.User;
 import ua.nure.koval.hotel.service.RequestService;
 import ua.nure.koval.hotel.service.RoomService;
+import ua.nure.koval.hotel.util.RoomCapacityComparator;
+import ua.nure.koval.hotel.util.RoomClassComparator;
+import ua.nure.koval.hotel.util.RoomCostComparator;
 
 /**
  * Servlet implementation class CreateRequest
@@ -42,8 +47,16 @@ public class NewRequest extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		List<Room> rooms = rs.getFreeRooms();
+		if(request.getParameter("sort") != null) {
+			if (request.getParameter("sort").equalsIgnoreCase("cost")) {
+				Collections.sort(rooms, new RoomCostComparator());
+			} else if (request.getParameter("sort").equalsIgnoreCase("capacity")) {
+				Collections.sort(rooms, new RoomCapacityComparator());
+			} else if (request.getParameter("sort").equalsIgnoreCase("class")) {
+				Collections.sort(rooms, new RoomClassComparator());
+			}
+		}
 		session.setAttribute("rooms", rooms);
-		session.setAttribute("today", LocalDate.now());
 		response.sendRedirect("new_request");
 	}
 

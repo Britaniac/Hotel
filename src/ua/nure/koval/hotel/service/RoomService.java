@@ -28,4 +28,12 @@ public class RoomService {
 	public boolean updateRoom(Room room) {
 		return rd.update(room);		
 	}
+
+	public boolean save(Room room) {
+		return rd.save(room);		
+	}
+
+	public boolean updateStatus(Long roomId, Status status) {
+		return rd.updateStatus(roomId, status);
+	}
 }

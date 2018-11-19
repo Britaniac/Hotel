@@ -11,14 +11,10 @@
 <%@ include file="/WEB-INF/jspf/request_view.jspf" %>
 <form action="new_request"  method="post">
 <input type="submit" value="Create new"></input>
+<br>
+<br>
+<h3>Invoices avaiting payment:</h3>
+<%@ include file="/WEB-INF/jspf/invoice_view.jspf" %>
 </form>
-<c:if test="${request.invoiceId > 0}">
-<p>You have an invoice awaiting payment:</p>
-<c:set var="id" value="${request.invoiceId}"/>
-<c:set var="link" value="pay?${id}"/>
-<form action="${link}">
-<input type="submit" value="Pay"></input>
-</form>
-</c:if>
 </body>
 </html>

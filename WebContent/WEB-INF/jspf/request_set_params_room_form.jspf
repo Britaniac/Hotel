@@ -13,7 +13,7 @@ Room Class:<br>
 </select>
 <br>
 <br>
-Date to:<br>
-<input type="date" name="to" required="required" min="${sessionScope.today}">
+Duration in days:<br>
+<input type="number" name="duration" required="required" min="1">
 <input type="submit" value="Submit"/>
 </form>

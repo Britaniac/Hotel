@@ -1,13 +1,15 @@
 <%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 
-<form action="request_by_room" method="post">
+<br>
+<br>
+<h3>Available rooms</h3>
+<form action="invoice" method="post">
 <c:forEach items="${rooms}" var="room">
 <input type="radio" name="room" value="${room.id}">${room.capacity} person ${room.rClass} room - ${room.cost}$ per day<br>
 </c:forEach>
-<br>
-<br>
-Duration in days:<br>
-<input type="number" name="duration" required="required" min="1">
-<input type="submit" value="Submit"/> 
+<c:forEach items="${requests}" var="request">
+<input type="hidden" name="id" value="${request.id}">
+</c:forEach>
+<input type="submit" value="Submit"> 
 </form>

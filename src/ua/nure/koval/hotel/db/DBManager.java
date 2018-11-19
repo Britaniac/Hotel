@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import ua.nure.koval.hotel.connection_pool.DBCPDataSource;
+import ua.nure.koval.hotel.connection_pool.HikariCPDataSource;
 
 public class DBManager {
 
@@ -20,7 +21,8 @@ public class DBManager {
 	}
 
 	public Connection getConnection() throws SQLException {
-		Connection con = DBCPDataSource.getConnection();
+		//Connection con = DBCPDataSource.getConnection();
+		Connection con = HikariCPDataSource.getConnection();
 		return con;
 	}
 }

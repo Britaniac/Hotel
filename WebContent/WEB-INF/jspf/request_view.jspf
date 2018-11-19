@@ -8,8 +8,8 @@
 <td>Requested capacity</td>
 <td>Request class</td>
 <td>Room ID</td>
-<td>From</td>
-<td>To</td>
+<td>Created</td>
+<td>Duration</td>
 <td>User ID</td>
 <td>Action</td>
 </tr>
@@ -20,18 +20,23 @@
 <td>${request.rClass}</td>
 <td>${request.roomId}</td>
 <td>${request.created}</td>
-<td>${request.to}</td>
+<td>${request.duration}</td>
 <td>${request.userID}</td>
 <c:choose>
 <c:when test="${user.role == 'CLIENT'}">
-<td><form action="delete_request"  method="post">
+<c:set var="id" value="${request.id}"/>
+<c:set var="link" value="delete_request?id=${id}"/>
+<td><form action="${link}"  method="post">
 <input type="submit" value="Cancel"></input>
 </form></td>
 </c:when>
 <c:when test="${user.role == 'MANAGER'}">
-<td><form action="delete_request"  method="post">
+<c:set var="id" value="${request.id}"/>
+<c:set var="link" value="delete_request?id=${id}"/>
+<td><form action="${link}"  method="post">
 <input type="submit" value="Cancel"></input>
-<input type="submit" value="Process" formaction="invoice"/>
+<c:set var="link" value="invoice?id=${id}"/>
+<input type="submit" value="Process" formaction="${link}"/>
 </form></td>
 </c:when>
 </c:choose>
