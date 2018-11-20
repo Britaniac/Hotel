@@ -15,9 +15,8 @@ form {
 </style>
 
 <c:set var="user" value="${sessionScope.user}"/>
-<fmt:setLocale value="user.localeName"/>
-<fmt:setBundle basename="main.resources.messages" />
-
+<fmt:setLocale value="ru" scope="session"/>
+<fmt:setBundle basename="main.resources.messages"/>
 
 <html>
 
@@ -37,8 +36,10 @@ form {
 <br>
 <input type=password name="password">
 <br>
-<input type=submit value="Login"> OR 
-<input type=submit value="Register" formaction="register.jsp">
+<fmt:message key="label.submit" var="submit"/>
+<input type=submit value="${submit}"></input> <fmt:message key="label.or"/>
+<fmt:message key="label.register" var="register"/>
+<input type=submit value="${register}" formaction="register.jsp">
 </form>
 </section>
 

@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 
 <c:set var="user" value="${sessionScope.user}"/>
-<fmt:setLocale value="${user.localeName}" />
+<fmt:setLocale value="${sessionScope.locale}" />
 <fmt:setBundle basename="main.resources.messages" />
 
 <html>
@@ -15,7 +15,8 @@
 <input type="radio" name="sort" value="cost"><fmt:message key="label.sort_cost"/>
 <input type="radio" name="sort" value="capacity"><fmt:message key="label.sort_capacity"/>
 <input type="radio" name="sort" value="class"><fmt:message key="label.sort_class"/>
-<input type="submit" value="Sort">
+<fmt:message key="label.sort" var="sort"/>
+<input type="submit" value="${sort}">
 </form>
 <h4><fmt:message key="label.available_rooms"/></h4>
 <%@ include file="/WEB-INF/jspf/request_choose_room_form.jspf" %>

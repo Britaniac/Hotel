@@ -10,10 +10,11 @@
 <h3><fmt:message key="label.available_rooms"/></h3>
 <form action="invoice" method="post">
 <c:forEach items="${rooms}" var="room">
-<input type="radio" name="room" value="${room.id}">${room.capacity} person ${room.rClass} room - ${room.cost}$ per day<br>
+<input type="radio" name="room" value="${room.id}">${room.capacity} <fmt:message key="label.person"/> ${room.rClass} <fmt:message key="label.room"/> - ${room.cost}$ <fmt:message key="label.per_day"/><br>
 </c:forEach>
 <c:forEach items="${requests}" var="request">
 <input type="hidden" name="id" value="${request.id}">
 </c:forEach>
-<input type="submit" value="Submit"> 
+<fmt:message key="label.submit" var="submit"/>
+<input type="submit" value="${submit}"> 
 </form>

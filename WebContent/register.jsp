@@ -6,32 +6,37 @@ body{
 }
 </style>
 
+<c:set var="user" value="${sessionScope.user}"/>
+<fmt:setLocale value="${sessionScope.locale}" />
+<fmt:setBundle basename="main.resources.messages" />
+
 <html>
 <body>
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 
 <form action="register_user" method="post">
-Login:
+<fmt:message key="label.login"/>
 <br>
 <input type=text name="login" required="required">
 <br>
-Password:
+<fmt:message key="label.password"/>
 <br>
 <input type=password name="password" required="required">
 <br>
-First name:
+<fmt:message key="label.fname"/>
 <br>
 <input type=text name="fName" required="required">
 <br>
-Last name:
+<fmt:message key="label.lname"/>
 <br>
 <input type=text name="lName" required="required">
 <br>
-E-mail:
+<fmt:message key="label.email"/>
 <br>
 <input type=email name="email" required="required">
 <br>
-<input type=submit value="Register">
+<fmt:message key="label.register" var="register"/>
+<input type=submit value="${register}">
 </form>
 </body>
 </html>

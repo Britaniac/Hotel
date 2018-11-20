@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 
 <c:set var="user" value="${sessionScope.user}"/>
-<fmt:setLocale value="${user.localeName}" />
+<fmt:setLocale value="${sessionScope.locale}" />
 <fmt:setBundle basename="main.resources.messages" />
 
 <html>

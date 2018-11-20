@@ -4,10 +4,10 @@
 <table>
 <tr>
 <td>ID</td>
-<td>Payment sum</td>
-<td>Created</td>
-<td>For request</td>
-<td>Action</td>
+<td><fmt:message key="label.pay_sum"/></td>
+<td><fmt:message key="label.created"/></td>
+<td><fmt:message key="label.requestID"/></td>
+<td><fmt:message key="label.action"/></td>
 </tr>
 <c:forEach items="${invoices}" var="invoice">
 <tr>
@@ -17,7 +17,8 @@
 <td>${invoice.requestID}</td>
 <td>
 <form action="payment?id=${invoice.id}" method="post">
-<input type="submit" value="Pay">
+<fmt:message key="label.action" var="pay"/>
+<input type="submit" value="${pay}">
 </form>
 </td>
 </tr>

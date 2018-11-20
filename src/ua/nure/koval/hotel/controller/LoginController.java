@@ -42,6 +42,8 @@ public class LoginController extends HttpServlet {
 		User user = null;
 		if (session.getAttribute("user") != null) {
 			user = (User) session.getAttribute("user");
+			System.out.println(user.getLocaleName());
+			session.setAttribute("locale", user.getLocaleName());
 		}
 		if (user.getRole().getName().equalsIgnoreCase("manager")) {
 			List<Request> requests = rs.getUnprocessed();

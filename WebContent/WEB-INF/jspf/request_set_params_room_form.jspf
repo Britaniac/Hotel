@@ -2,18 +2,19 @@
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 
 <form action="request_by_params" method="post">
-Room Capacity:<br>
+<fmt:message key="label.capacity"/><br>
 <input type="number" name="capacity" required="required" min="1" max="3">
 <br>
-Room Class:<br>
+<fmt:message key="label.class"/><br>
 <select name="class" required="required">
-<option value="standard">Standard</option>
-<option value="deluxe">Deluxe</option>
-<option value="suite">Suite</option>
+<option value="standard"><fmt:message key="label.STANDARD"/></option>
+<option value="deluxe"><fmt:message key="label.DELUXE"/></option>
+<option value="suite"><fmt:message key="label.SUITE"/></option>
 </select>
 <br>
 <br>
-Duration in days:<br>
+<fmt:message key="label.duration_days"/><br>
 <input type="number" name="duration" required="required" min="1">
-<input type="submit" value="Submit"/>
+<fmt:message key="label.submit" var="submit"/>
+<input type="submit" value="${submit}"/>
 </form>

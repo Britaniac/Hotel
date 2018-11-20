@@ -1,5 +1,10 @@
 <%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
+<c:set var="user" value="${sessionScope.user}"/>
+
+<fmt:setLocale value="${sessionScope.locale}" />
+<fmt:setBundle basename="main.resources.messages" />
+
 <html>
 <head>
   <link rel="stylesheet" href="styles.css">
@@ -8,9 +13,9 @@
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
 <table>
 <tr>
-<td>Capacity</td>
-<td>Cost</td>
-<td>Class</td>
+<td><fmt:message key="label.capacity"/></td>
+<td><fmt:message key="label.cost"/></td>
+<td><fmt:message key="label.class"/></td>
 </tr>
 <c:forEach items="${roomList}" var="room">
 <tr>
