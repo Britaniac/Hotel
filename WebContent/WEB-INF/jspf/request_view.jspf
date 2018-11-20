@@ -2,16 +2,18 @@
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 
 <c:set var="user" value="${sessionScope.user}"/>
+<fmt:setLocale value="user.localeName"/>
+<fmt:setBundle basename="main.resources.messages" />
 <table>
 <tr>
 <td>ID</td>
-<td>Requested capacity</td>
-<td>Request class</td>
-<td>Room ID</td>
-<td>Created</td>
-<td>Duration</td>
-<td>User ID</td>
-<td>Action</td>
+<td><fmt:message key="label.req_capacity"/></td>
+<td><fmt:message key="label.class"/></td>
+<td><fmt:message key="label.roomID"/></td>
+<td><fmt:message key="label.created"/></td>
+<td><fmt:message key="label.duration"/></td>
+<td><fmt:message key="label.userID"/></td>
+<td><fmt:message key="label.action"/></td>
 </tr>
 <c:forEach items="${requests}" var="request">
 <tr>
@@ -27,16 +29,16 @@
 <c:set var="id" value="${request.id}"/>
 <c:set var="link" value="delete_request?id=${id}"/>
 <td><form action="${link}"  method="post">
-<input type="submit" value="Cancel"></input>
+<input type="submit" value="<fmt:message key="label.cancel"/>"></input>
 </form></td>
 </c:when>
 <c:when test="${user.role == 'MANAGER'}">
 <c:set var="id" value="${request.id}"/>
 <c:set var="link" value="delete_request?id=${id}"/>
 <td><form action="${link}"  method="post">
-<input type="submit" value="Cancel"></input>
+<input type="submit" value="<fmt:message key="label.cancel"/>"></input>
 <c:set var="link" value="invoice?id=${id}"/>
-<input type="submit" value="Process" formaction="${link}"/>
+<input type="submit" value="<fmt:message key="label.process"/>" formaction="${link}"/>
 </form></td>
 </c:when>
 </c:choose>

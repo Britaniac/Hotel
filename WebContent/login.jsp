@@ -13,6 +13,12 @@ form {
 	text-align: center;
 }
 </style>
+
+<c:set var="user" value="${sessionScope.user}"/>
+<fmt:setLocale value="user.localeName"/>
+<fmt:setBundle basename="main.resources.messages" />
+
+
 <html>
 
 <body>
@@ -23,11 +29,11 @@ form {
 <%@ include file="/WEB-INF/jspf/rooms_sidebar.jspf" %>
 
 <form action="login_check" method="post">
-Login:
+<fmt:message key="label.login"/>
 <br>
 <input type=text name="login">
 <br>
-Password:
+<fmt:message key="label.password"/>
 <br>
 <input type=password name="password">
 <br>

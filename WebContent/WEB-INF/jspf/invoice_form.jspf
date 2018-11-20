@@ -1,9 +1,13 @@
 <%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
 
+<c:set var="user" value="${sessionScope.user}"/>
+<fmt:setLocale value="${user.localeName}" />
+<fmt:setBundle basename="main.resources.messages" />
+
 <br>
 <br>
-<h3>Available rooms</h3>
+<h3><fmt:message key="label.available_rooms"/></h3>
 <form action="invoice" method="post">
 <c:forEach items="${rooms}" var="room">
 <input type="radio" name="room" value="${room.id}">${room.capacity} person ${room.rClass} room - ${room.cost}$ per day<br>

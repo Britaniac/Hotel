@@ -1,3 +1,6 @@
+<%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
+<%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
+
 <style>
 header {
     background-color: teal;
@@ -8,4 +11,4 @@ header {
     color: black;
 }
 </style>
-<header><h2>Welcome to Project Hotel</h2></header>
+<header><h2><fmt:message key="label.welcome"/></h2></header>
