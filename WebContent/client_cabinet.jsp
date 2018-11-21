@@ -15,7 +15,7 @@
 <%@ include file="/WEB-INF/jspf/request_view.jspf" %>
 <form action="new_request"  method="post">
 <fmt:message key="label.new_request" var="newReq"/>
-<input type="submit" value="${newRec}"></input>
+<input type="submit" value="${newReq}"></input>
 <br>
 <br>
 <h3><fmt:message key="label.inv_awaiting"/></h3>

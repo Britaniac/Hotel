@@ -6,7 +6,6 @@ body{
 }
 </style>
 
-<c:set var="user" value="${sessionScope.user}"/>
 <fmt:setLocale value="${sessionScope.locale}" />
 <fmt:setBundle basename="main.resources.messages" />
 

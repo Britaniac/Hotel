@@ -10,7 +10,7 @@
 <html>
 <body>
 <%@ include file="/WEB-INF/jspf/header.jspf" %>
-<c:set var ="msg" value="${sessionScope.message}"/>
+<%-- <c:set var ="msg" value="${sessionScope.message}"/>
 <c:choose>
 <c:when test="${msg=='Success'}">
 <fmt:message key="label.success"/>
@@ -18,7 +18,8 @@
 <c:when test="${msg=='Failure'}">
 <fmt:message key="label.failure"/>
 </c:when>
-</c:choose>
+</c:choose> --%>
+<c:out value="${sessionScope.message}"/>
 <a href="login.jsp"><fmt:message key="label.back"/></a>
 </body>
 </html>

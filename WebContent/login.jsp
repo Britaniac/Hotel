@@ -38,8 +38,7 @@ form {
 <br>
 <fmt:message key="label.submit" var="submit"/>
 <input type=submit value="${submit}"></input> <fmt:message key="label.or"/>
-<fmt:message key="label.register" var="register"/>
-<input type=submit value="${register}" formaction="register.jsp">
+<a href="register.jsp"><fmt:message key="label.register"/></a>
 </form>
 </section>
 

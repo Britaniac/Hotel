@@ -40,7 +40,7 @@
 <fmt:message key="label.cancel" var="cancel"/>
 <input type="submit" value="${cancel}"></input>
 <c:set var="link" value="invoice?id=${id}"/>
-<fmt:message key="label.submit" var="submit"/>
+<fmt:message key="label.process" var="submit"/>
 <input type="submit" value="${submit}" formaction="${link}"/>
 </form></td>
 </c:when>

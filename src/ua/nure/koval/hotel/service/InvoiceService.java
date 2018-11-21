@@ -32,6 +32,7 @@ public class InvoiceService {
 
 	public String createFromRequest(Request req) {
 		Room room = roomServ.getById(req.getRoomId());
+		System.out.println(room);
 		Invoice inv = new Invoice();
 		double sum = room.getCost() * req.getDuration();
 		inv.setSum(sum);
@@ -55,5 +56,9 @@ public class InvoiceService {
 
 	public boolean update(Invoice invoice) {
 		return invDao.update(invoice);
+	}
+
+	public boolean delete(Invoice inv) {
+		return invDao.delete(inv);
 	}
 }

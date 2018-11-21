@@ -20,7 +20,7 @@ public class RoomDAO implements DAO<Room> {
 	private static final String SQL_UPDATE_ROOM = "UPDATE rooms SET capacity=?, cost=?, class=?,status=? WHERE ID=?";
 	private static final String SQL_DELETE_ROOM = "DELETE FROM rooms WHERE ID=?";
 	private static final String SQL_FIND_BY_STATUS = "SELECT * FROM rooms where status=?";
-	private static final String SQL_UPDATE_STATUS = "UPDATE room SET status=? WHERE ID=?";
+	private static final String SQL_UPDATE_STATUS = "UPDATE rooms SET status=? WHERE ID=?";
 
 	@Override
 	public Room getById(Long id) {
