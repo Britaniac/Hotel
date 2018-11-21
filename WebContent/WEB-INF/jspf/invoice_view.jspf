@@ -16,8 +16,10 @@
 <td>${invoice.created}</td>
 <td>${invoice.requestID}</td>
 <td>
-<form action="payment?id=${invoice.id}" method="post">
-<fmt:message key="label.action" var="pay"/>
+<c:set var="id" value="${request.id}"/>
+<c:set var="link" value="invoice?id=${id}"/>
+<form action="${link}" method="post">
+<fmt:message key="label.pay" var="pay"/>
 <input type="submit" value="${pay}">
 </form>
 </td>
