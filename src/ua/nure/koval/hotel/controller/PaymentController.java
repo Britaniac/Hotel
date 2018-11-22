@@ -9,7 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ua.nure.koval.hotel.entity.Invoice;
+import ua.nure.koval.hotel.entity.Request;
 import ua.nure.koval.hotel.service.InvoiceService;
+import ua.nure.koval.hotel.service.RequestService;
+import ua.nure.koval.hotel.util.Payment;
 
 /**
  * Servlet implementation class PaymentController
@@ -37,8 +40,8 @@ public class PaymentController extends HttpServlet {
 		HttpSession session = request.getSession();
 		Long id = Long.parseLong(request.getParameter("id"));
 		Invoice invoice = invServ.getById(id);
-		invoice.setPaid(true);
-		if (invServ.update(invoice)) {
+		Payment payment = new Payment();
+		if (payment.payForInvoice(invoice)) {
 			session.setAttribute("message", "Success");
 		} else {
 			session.setAttribute("message", "Failure");

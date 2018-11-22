@@ -86,9 +86,9 @@ public class InvoiceDAO implements DAO<Invoice> {
 			int k = 1;
 			pstmt.setDouble(k++, inv.getSum());
 			pstmt.setDate(k++, Date.valueOf(inv.getCreated()));
-			pstmt.setLong(k++, inv.getId());
 			pstmt.setBoolean(k++, inv.isPaid());
 			pstmt.setLong(k++, inv.getRequestID());
+			pstmt.setLong(k++, inv.getId());
 			if (pstmt.executeUpdate() > 0) {
 				return true;
 			}	

@@ -23,7 +23,7 @@ public class InvoiceChecker implements Runnable{
 		System.out.println("Checking stuff");
 		List<Invoice> invoices = invServ.getAllInvoices();
 		for (Invoice inv: invoices) {
-			if (now.minusDays(3L).isAfter(inv.getCreated())) {
+			if (now.minusDays(3L).isAfter(inv.getCreated()) && !inv.isPaid()) {
 				System.out.println(inv.getRequestID());
 				Request req = reqServ.getRequestById(inv.getRequestID());
 				System.out.println(reqServ.deleteRequest(req));

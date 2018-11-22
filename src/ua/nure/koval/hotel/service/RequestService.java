@@ -11,14 +11,11 @@ import ua.nure.koval.hotel.entity.enums.RoomClass;
 import ua.nure.koval.hotel.entity.enums.Status;
 
 public class RequestService {
-	RequestDAO reqDao = null;
-	RoomService roomServ = null;
-	InvoiceService invServ = null;
+	private RequestDAO reqDao = new RequestDAO();
+	private RoomService roomServ = new RoomService();
+	private InvoiceService invServ = new InvoiceService();
 	
 	public RequestService() {
-		reqDao = new RequestDAO();
-		roomServ = new RoomService();
-		invServ = new InvoiceService();
 	}
 	
 	public List<Request> getAllRequests() {

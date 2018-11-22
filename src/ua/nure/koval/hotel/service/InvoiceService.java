@@ -10,12 +10,10 @@ import ua.nure.koval.hotel.entity.User;
 import ua.nure.koval.hotel.entity.enums.Status;
 
 public class InvoiceService {
-	private InvoiceDAO invDao = null;
-    private RoomService roomServ = null;
-	
+	private InvoiceDAO invDao = new InvoiceDAO();
+    private RoomService roomServ = new RoomService();
+    
 	public InvoiceService() {
-		invDao = new InvoiceDAO();
-		roomServ = new RoomService();
 	}
 	
 	public List<Invoice> getAllInvoices() {
@@ -61,4 +59,5 @@ public class InvoiceService {
 	public boolean delete(Invoice inv) {
 		return invDao.delete(inv);
 	}
+
 }
